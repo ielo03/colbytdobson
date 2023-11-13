@@ -1,2 +1,2 @@
 # colbytdobson
-The personal website of Colby T Dobson
+The personal website of Colby T. Dobson
