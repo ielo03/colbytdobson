@@ -1,0 +1,27 @@
+{
+  "name": "colbytdobson",
+  "version": "1.0.0",
+  "description": "The personal website of Colby T. Dobson",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ielo03/colbytdobson.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "website",
+    "http",
+    "personal",
+    "portfolio"
+  ],
+  "author": "Colby T. Dobson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ielo03/colbytdobson/issues"
+  },
+  "homepage": "https://github.com/ielo03/colbytdobson#readme"
+}
