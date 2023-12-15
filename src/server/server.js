@@ -1,9 +1,8 @@
 import express from 'express';
 const app = express();
 
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../");
+import path from "path";
+import config from '../../modules/config.js';
 
 import hbs from 'express-handlebars';
 
@@ -11,7 +10,7 @@ app.set("view engine", "hbs");
 app.engine(
     "hbs",
     hbs.engine({
-        layoutsDir: path.join(__dirname, "views/layouts"),
+        layoutsDir: path.join(config.__dirname, "views/layouts"),
         defaultLayout: "main",
         extname: "hbs",
     })
@@ -19,7 +18,7 @@ app.engine(
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(config.__dirname, 'public')));
 
 app.get("/", function (req, resp) {
     resp.render("home");
