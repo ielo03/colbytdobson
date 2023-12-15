@@ -1,0 +1,39 @@
+{
+  "name": "web-dev-final",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "My web development class final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ielo03/web-dev-final.git"
+  },
+  "keywords": [
+    "portfolio",
+    "web",
+    "dev",
+    "development",
+    "cs",
+    "386",
+    "cs386",
+    "final",
+    "project",
+    "student",
+    "university"
+  ],
+  "author": "ielo03",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ielo03/web-dev-final/issues"
+  },
+  "homepage": "https://github.com/ielo03/web-dev-final#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "mongoose": "^8.0.3"
+  }
+}
