@@ -1,15 +1,25 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import {fileURLToPath} from "url";
+
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../");
+const getPathTo = (pathFromRoot) => path.join(__dirname, pathFromRoot);
 
 const serverConfig = {
-    PORT: 3001,
-    HOST: 'localhost'
+    port: 3001,
+    host: "localhost"
 };
+
+const databaseConfig = {
+    username: "colbytdobson",
+    password: "uZBxpPKvLAOngoTa",
+    connectionString: "mongodb+srv://colbytdobson:uZBxpPKvLAOngoTa@host.n9swqcw.mongodb.net/portfolio?retryWrites=true&w=majority"
+}
 
 const config = {
     serverConfig,
-    __dirname
+    databaseConfig,
+    __dirname,
+    getPathTo
 };
 
 export default config;
