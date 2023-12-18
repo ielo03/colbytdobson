@@ -6,7 +6,8 @@ function get(req, res, ignored) {
         return;
     }
     res.render("register", {
-        script: "/scripts/register.js"
+        script: "/scripts/register.js",
+        style: "/styles/login.css"
     });
 }
 

@@ -2,7 +2,7 @@ import path from "path";
 import {fileURLToPath} from "url";
 
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../");
-const getPathTo = (pathFromRoot) => path.join(__dirname, pathFromRoot);
+const getPathTo = pathFromRoot => path.join(__dirname, pathFromRoot);
 
 const serverConfig = {
     port: 3001,
@@ -16,11 +16,14 @@ const databaseConfig = {
     connectionString: "mongodb+srv://colbytdobson:uZBxpPKvLAOngoTa@host.n9swqcw.mongodb.net/portfolio?retryWrites=true&w=majority"
 };
 
+const appName = "Colby T. Dobson";
+
 const config = {
     serverConfig,
     databaseConfig,
     __dirname,
-    getPathTo
+    getPathTo,
+    appName
 };
 
 export default config;

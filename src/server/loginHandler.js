@@ -7,7 +7,8 @@ function get(req, res, ignored) {
         return;
     }
     res.render("login", {
-        script: "/scripts/login.js"
+        script: "/scripts/login.js",
+        style: "/styles/login.css"
     });
 }
 
