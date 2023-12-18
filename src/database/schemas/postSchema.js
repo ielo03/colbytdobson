@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import commentSchema from "src/mg-schema/commentSchema.js";
+import mongoose from "mongoose";
+import commentSchema from "./commentSchema.js";
 
 const postSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true
     },
     title: {
@@ -18,19 +18,15 @@ const postSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true,
-        default: 'Colby Dobson',
+        default: "Colby Dobson"
     },
     tags: [String],
-    postedAt: {
-        type: Date,
-        default: Date.now
-    },
     updatedAt: {
         type: Date,
         default: Date.now
     },
     comments: [commentSchema]
 });
-const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 export default Post;

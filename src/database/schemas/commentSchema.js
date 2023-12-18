@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
     postId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post',
+        ref: "Post",
         required: true
     },
     author: {
@@ -15,15 +15,11 @@ const commentSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    postedAt: {
-        type: Date,
-        default: Date.now
-    },
     updatedAt: {
         type: Date,
         default: Date.now
     }
 });
-const Comment = mongoose.model('Comment', commentSchema);
+const Comment = mongoose.model("Comment", commentSchema);
 
 export default Comment;

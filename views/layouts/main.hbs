@@ -4,6 +4,12 @@
     <title>Colby T. Dobson</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/styles/base.css">
+    {{#if style}}
+        <link rel="stylesheet" href="{{style}}">
+    {{/if}}
+    {{#if script}}
+        <script src="{{script}}"></script>
+    {{/if}}
 </head>
 <body>
 {{{body}}}

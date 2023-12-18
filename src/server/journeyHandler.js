@@ -1,4 +1,4 @@
-function get(req, res) {
+function get(req, res, ignored) {
     res.render("journey");
 }
 

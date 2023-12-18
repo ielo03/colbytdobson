@@ -3,3 +3,14 @@ html {
     color: #C8C8C8;
     background-color: #121212;
 }
+
+a {
+    color: #8853C7;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
