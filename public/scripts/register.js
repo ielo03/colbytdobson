@@ -1,20 +1,20 @@
 window.addEventListener("load", function () {
-    document.getElementById("register-btn").addEventListener("click", function() {
+    document.getElementById("register-btn").addEventListener("click", function () {
         submitRegistration();
     });
 
-    document.getElementById("username").addEventListener("keydown", function (event) {
+    document.getElementById("username").addEventListener("keyup", function (event) {
         validateUsername();
         enter(event);
     });
-    document.getElementById("password").addEventListener("keydown", function (event) {
+    document.getElementById("password").addEventListener("keyup", function (event) {
         validatePassword();
         enter(event);
     });
 });
 
-function enter (event) {
-    if (event.key === 'Enter') {
+function enter(event) {
+    if (event.key === "Enter") {
         submitRegistration();
     }
 }
@@ -26,6 +26,8 @@ function validateUsername() {
     if (username.length < 3 || username.length > 20) usernameError.innerText = "Username must be between 3 and 20 characters long.";
     else if (!/^[a-zA-Z0-9_\-]+$/.test(username)) usernameError.innerText = "Username can only contain letters, numbers, hyphens, and underscores.";
     else usernameError.innerText = "";
+    console.log(username);
+    console.log(document.getElementById("username").value);
 }
 
 function validatePassword() {
