@@ -14,7 +14,7 @@ a:hover {
     cursor: pointer;
 }
 
-input {
+input, textarea {
     border: 2px solid #416680;
     background-color: #ABABAB;
     color: #302E31;
@@ -42,4 +42,40 @@ input[type="button"]:hover {
     margin: 5px 0;
     padding: 5px 10px;
     width: 12em;
+}
+
+.blank-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    resize: none;
+
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.padding {
+    padding: 1em;
+}
+
+textarea {
+    height: 50vh;
+    width: 90%;
+}
+
+.fill-w {
+    width: 80%;
+}
+
+.t-margin {
+    margin-top: 1em
+}
+
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

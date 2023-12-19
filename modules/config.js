@@ -18,12 +18,15 @@ const databaseConfig = {
 
 const appName = "Colby T. Dobson";
 
+const adminId = "658126ebd50e78888c9f634d";
+
 const config = {
     serverConfig,
     databaseConfig,
     __dirname,
     getPathTo,
-    appName
+    appName,
+    adminId
 };
 
 export default config;

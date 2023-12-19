@@ -9,7 +9,9 @@ import homeHandler from "./homeHandler.js";
 import journeyHandler from "./journeyHandler.js";
 import loginHandler from "./loginHandler.js";
 import registerHandler from "./registerHandler.js";
-import logoutHandler from "./logoutHandler.js";
+import logoutHandler from "./logoutHandler.js"
+import createPostHandler from "./createPostHandler.js";
+import postHandler from "./postHandler.js";
 
 const app = express();
 
@@ -63,6 +65,18 @@ app.post("/register", function (req, res, next) {
 
 app.get("/logout", function (req, res, next) {
     logoutHandler.get(req, res, next);
+});
+
+app.get("/createPost", function (req, res, next) {
+    createPostHandler.get(req, res, next);
+});
+
+app.post("/createPost", function (req, res, next) {
+    createPostHandler.post(req, res, next);
+});
+
+app.get("/post", function (req, res, next) {
+    postHandler.get(req, res, next);
 });
 
 app.use((req, res, next) => {

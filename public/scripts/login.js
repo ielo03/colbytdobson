@@ -18,7 +18,6 @@ function enter (event) {
 function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    console.log("login");
 
     if (username.length > 0 && password.length > 0) {
         const usernameError = document.getElementById("usernameError");

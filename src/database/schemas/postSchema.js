@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import commentSchema from "./commentSchema.js";
+import { commentSchema } from "./commentSchema.js";
 
 const postSchema = new mongoose.Schema({
     userId: {
@@ -27,6 +27,13 @@ const postSchema = new mongoose.Schema({
     },
     comments: [commentSchema]
 });
+
+postSchema.set('toJSON', { virtuals: true });
+
+postSchema.virtual('date').get(function() {
+    return this._id.getTimestamp();
+});
+
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;

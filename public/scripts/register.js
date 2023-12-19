@@ -26,8 +26,6 @@ function validateUsername() {
     if (username.length < 3 || username.length > 20) usernameError.innerText = "Username must be between 3 and 20 characters long.";
     else if (!/^[a-zA-Z0-9_\-]+$/.test(username)) usernameError.innerText = "Username can only contain letters, numbers, hyphens, and underscores.";
     else usernameError.innerText = "";
-    console.log(username);
-    console.log(document.getElementById("username").value);
 }
 
 function validatePassword() {
