@@ -103,3 +103,8 @@ textarea {
     text-decoration: none;
     cursor: default;
 }
+
+.footer {
+    width: 95%;
+    height: 20px;
+}

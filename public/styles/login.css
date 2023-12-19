@@ -2,7 +2,7 @@ input[type="text"], input[type="password"] {
     font-size: 20pt;
 }
 
-body {
+.body {
     margin-top: 20vh;
     align-content: center;
     justify-content: center;

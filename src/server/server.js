@@ -12,6 +12,8 @@ import registerHandler from "./registerHandler.js";
 import logoutHandler from "./logoutHandler.js"
 import createPostHandler from "./createPostHandler.js";
 import postHandler from "./postHandler.js";
+import resumeHandler from "./resumeHandler.js";
+import projectsHandler from "./projectsHandler.js";
 
 const app = express();
 
@@ -77,6 +79,14 @@ app.post("/createPost", function (req, res, next) {
 
 app.get("/post", function (req, res, next) {
     postHandler.get(req, res, next);
+});
+
+app.get("/resume", function (req, res, next) {
+    resumeHandler.get(req, res, next);
+});
+
+app.get("/projects", function (req, res, next) {
+    projectsHandler.get(req, res, next);
 });
 
 app.use((req, res, next) => {

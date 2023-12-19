@@ -9,7 +9,7 @@ h2 {
     grid-template-columns: 1fr 1fr;
     align-items: center;
     grid-template-areas: "header links";
-    height: calc(95vh - 50px);
+    height: calc(90vh - 70px);
 }
 
 .grid-container > div.header {
