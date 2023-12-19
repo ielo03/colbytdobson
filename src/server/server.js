@@ -5,15 +5,7 @@ import config from "../../modules/config.js";
 
 import connect from "../database/connect.js";
 import hbs from "express-handlebars";
-import homeHandler from "./homeHandler.js";
-import journeyHandler from "./journeyHandler.js";
-import loginHandler from "./loginHandler.js";
-import registerHandler from "./registerHandler.js";
-import logoutHandler from "./logoutHandler.js"
-import createPostHandler from "./createPostHandler.js";
-import postHandler from "./postHandler.js";
-import resumeHandler from "./resumeHandler.js";
-import projectsHandler from "./projectsHandler.js";
+import routes from "../../routes/routes.js";
 
 const app = express();
 
@@ -43,51 +35,7 @@ app.use(session({
     cookie: {maxAge: 1000 * 60 * 60 * 24}
 }));
 
-app.get("/", function (req, res, next) {
-    homeHandler.get(req, res, next);
-});
-
-app.get("/journey", function (req, res, next) {
-    journeyHandler.get(req, res, next);
-});
-
-app.get("/login", function (req, res, next) {
-    loginHandler.get(req, res, next);
-});
-app.post("/login", function (req, res, next) {
-    loginHandler.post(req, res, next);
-});
-
-app.get("/register", function (req, res, next) {
-    registerHandler.get(req, res, next);
-});
-app.post("/register", function (req, res, next) {
-    registerHandler.post(req, res, next);
-});
-
-app.get("/logout", function (req, res, next) {
-    logoutHandler.get(req, res, next);
-});
-
-app.get("/createPost", function (req, res, next) {
-    createPostHandler.get(req, res, next);
-});
-
-app.post("/createPost", function (req, res, next) {
-    createPostHandler.post(req, res, next);
-});
-
-app.get("/post", function (req, res, next) {
-    postHandler.get(req, res, next);
-});
-
-app.get("/resume", function (req, res, next) {
-    resumeHandler.get(req, res, next);
-});
-
-app.get("/projects", function (req, res, next) {
-    projectsHandler.get(req, res, next);
-});
+app.use(routes);
 
 app.use((req, res, next) => {
     const err = new Error("Page Not Found");
