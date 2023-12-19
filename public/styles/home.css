@@ -1,4 +1,28 @@
 h2 {
-    font-size: 40pt;
     color: #AE9F76;
+    padding: 0;
+    margin: 0;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    grid-template-areas: "header links";
+    height: calc(95vh - 50px);
+}
+
+.grid-container > div.header {
+    grid-area: header;
+    font-size: 6vw;
+}
+
+.grid-container > div.links {
+    grid-area: links;
+    text-align: right;
+    font-size: 6vw;
+}
+
+.main-link:hover {
+    text-decoration: none;
 }
