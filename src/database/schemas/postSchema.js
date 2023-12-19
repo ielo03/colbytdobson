@@ -26,9 +26,10 @@ const postSchema = new mongoose.Schema({
         default: Date.now
     },
     comments: [commentSchema]
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
-
-postSchema.set('toJSON', { virtuals: true });
 
 postSchema.virtual('date').get(function() {
     return this._id.getTimestamp();
