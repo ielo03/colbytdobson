@@ -7,4 +7,4 @@ looking to learn more about me.<br>
 <br>
 I want to include my resume, my full projects when I can and descriptions<br>
 when I can't, and a blog-like section where I can write what has been<br>
-happening in my life and with my career. I hope to include more when I can.
+happening in my life and with my career. I hope to include more as well.
