@@ -1,6 +1,10 @@
 let lastMouseY = 0;
 
 window.addEventListener('load', function () {
+    window.addEventListener('pageshow', function() {
+        document.querySelector('html').classList.remove('background-transition');
+    });
+
     document.addEventListener('mousemove', function(event) {
         lastMouseY = event.clientY;
         if (mouseInMainContent(event)) {
@@ -8,7 +12,26 @@ window.addEventListener('load', function () {
         }
     });
 
+    document.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetUrl = link.getAttribute('href');
+            console.log(targetUrl);
+
+            runAnimation().then(function() {
+                window.location.href = targetUrl;
+            });
+        });
+    });
 });
+
+function runAnimation() {
+    document.querySelector('html').classList.add('background-transition');
+    return new Promise((resolve) => setTimeout(() => {
+        console.log('resolving');
+        resolve();
+    }, 1000));
+}
 
 function mouseInMainContent(event) {
     const headerHeight = document.getElementById('navbar').offsetHeight;

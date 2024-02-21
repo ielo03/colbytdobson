@@ -1,3 +1,14 @@
+html {
+    background-image: linear-gradient(to right, #121212 50%, #AE9F76 100%);
+    background-size: 200% 100%;
+    background-position-x: -100vw;
+    transition: background-position 0.5s;
+}
+
+.background-transition {
+    background-position-x: 0;
+}
+
 h2 {
     color: #AE9F76;
     padding: 0;

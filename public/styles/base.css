@@ -2,11 +2,9 @@ html {
     font-family: sans-serif;
     color: #C8C8C8;
     background-color: #121212;
-    background-image: linear-gradient(to right, #121212 0%, #AE9F76 100%);
 }
 
 a {
-    color: #121212;
     text-decoration: none;
 }
 
