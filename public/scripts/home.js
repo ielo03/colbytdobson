@@ -13,24 +13,16 @@ window.addEventListener('load', function () {
     });
 
     document.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const targetUrl = link.getAttribute('href');
-            console.log(targetUrl);
-
-            runAnimation().then(function() {
-                window.location.href = targetUrl;
-            });
+        link.addEventListener('click', function() {
+            if (link.id !== "logout") {
+                runAnimation();
+            }
         });
     });
 });
 
 function runAnimation() {
     document.querySelector('html').classList.add('background-transition');
-    return new Promise((resolve) => setTimeout(() => {
-        console.log('resolving');
-        resolve();
-    }, 1000));
 }
 
 function mouseInMainContent(event) {

@@ -2,17 +2,23 @@ import bcrypt from "bcrypt";
 import User from "../database/schemas/userSchema.js";
 
 function get(req, res, ignored) {
-    if (req.session.user) {
-        res.redirect("/journey");
-        return;
-    }
-    res.render("login", {
-        script: "/scripts/login.js",
-        style: "/styles/login.css"
-    });
+    /* This delay is bad practice, but is so much
+        simpler than AJAX for all html, scripts, css
+        and getting going back to work too. Only 500ms
+     */
+    setTimeout(function() {
+        if (req.session.user) {
+            res.redirect("/journey");
+            return;
+        }
+        res.render("login", {
+            script: "/scripts/login.js",
+            style: "/styles/login.css"
+        });
+    }, 500);
 }
 
-async function post(req, res, next) {
+async function post(req, res, _) {
     const {username, password} = req.body;
 
     const user = await User.findOne({username});
