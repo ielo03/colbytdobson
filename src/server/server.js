@@ -1,15 +1,11 @@
 import express from "express";
 import session from "express-session";
-import mongo from "connect-mongo";
 import config from "../../modules/config.js";
 
-import connect from "../database/connect.js";
 import hbs from "express-handlebars";
 import routes from "../../routes/routes.js";
 
 const app = express();
-
-connect(true);
 
 app.set("view engine", "hbs");
 app.engine(
@@ -31,7 +27,6 @@ app.use(session({
     secret: config.serverConfig.secret,
     resave: false,
     saveUninitialized: false,
-    store: mongo.create({mongoUrl: config.databaseConfig.connectionString}),
     cookie: {maxAge: 1000 * 60 * 60 * 24}
 }));
 
