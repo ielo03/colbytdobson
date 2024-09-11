@@ -5,7 +5,7 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../")
 const getPathTo = pathFromRoot => path.join(__dirname, pathFromRoot);
 
 const serverConfig = {
-    port: 80,
+    port: 3000,
     host: "localhost",
     secret: "this_is_my_little_secret"
 };
