@@ -1,9 +1,9 @@
 import express from "express";
 import session from "express-session";
-import config from "../../modules/config.js";
+import environment from "../../environment.mjs";
 
 import hbs from "express-handlebars";
-import routes from "../../routes/routes.js";
+import routes from "../../routes/routes.mjs";
 
 const app = express();
 
@@ -11,20 +11,20 @@ app.set("view engine", "hbs");
 app.engine(
     "hbs",
     hbs.engine({
-        layoutsDir: config.getPathTo("views/layouts"),
+        layoutsDir: environment.getPathTo("views/layouts"),
         defaultLayout: "main",
         extname: "hbs"
     })
 );
 
-app.use(express.static(config.getPathTo("public")));
+app.use(express.static(environment.getPathTo("public")));
 
 app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 
 app.use(session({
-    secret: config.serverConfig.secret,
+    secret: environment.serverConfig.secret,
     resave: false,
     saveUninitialized: false,
     cookie: {maxAge: 1000 * 60 * 60 * 24}
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     const code = err.code || 500;
     const message = err.message || "Internal Server Error";
     const context = {

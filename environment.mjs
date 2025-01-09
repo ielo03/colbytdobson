@@ -12,11 +12,11 @@ const serverConfig = {
 
 const appName = "Colby T. Dobson";
 
-const config = {
+const environment = {
     serverConfig,
     __dirname,
     getPathTo,
     appName
 };
 
-export default config;
+export default environment;

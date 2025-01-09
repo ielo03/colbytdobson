@@ -1,4 +1,4 @@
-import startServer from "./src/server/startServer.js";
+import startServer from "./src/server/startServer.mjs";
 
 startServer();
 

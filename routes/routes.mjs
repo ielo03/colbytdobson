@@ -1,8 +1,8 @@
 import express from "express";
-import homeHandler from "../src/server/homeHandler.js";
-import journeyHandler from "../src/server/journeyHandler.js";
-import resumeHandler from "../src/server/resumeHandler.js";
-import projectsHandler from "../src/server/projectsHandler.js";
+import homeHandler from "../src/server/homeHandler.mjs";
+import journeyHandler from "../src/server/journeyHandler.mjs";
+import resumeHandler from "../src/server/resumeHandler.mjs";
+import projectsHandler from "../src/server/projectsHandler.mjs";
 
 const router = express.Router();
 
