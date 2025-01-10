@@ -5,9 +5,11 @@
     justify-content: center; /* Center buttons within the container */
     align-items: stretch; /* Ensure all buttons have the same height */
     padding: 2%; /* Add padding around the container */
-    flex-wrap: nowrap; /* Prevent wrapping by default */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
     width: 100%; /* Ensure container takes full width of parent */
-    overflow-x: auto; /* Allow horizontal scrolling if buttons overflow */
+    max-width: 100%; /* Prevent overflow on the right side */
+    box-sizing: border-box; /* Include padding in width calculations */
+    overflow-x: hidden; /* Prevent horizontal scrolling when buttons wrap */
 }
 
 /* Button Styles */
@@ -27,6 +29,7 @@
     font-size: 1rem; /* Base font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+    box-sizing: border-box; /* Include padding in width/height calculations */
 }
 
 /* Button Hover and Active States */
@@ -44,6 +47,7 @@
     font-size: 1.5rem; /* Larger text for the title */
     font-weight: bold; /* Bold font for emphasis */
     margin-bottom: 10px; /* Space below the title */
+    text-align: center; /* Ensure the title is center-aligned */
 }
 
 /* Description Styles */
