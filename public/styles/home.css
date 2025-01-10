@@ -1,11 +1,15 @@
 .project-container {
     display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: stretch;
 }
 
 .project-button {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 10px;
-    margin: 10px;
     border: 1px solid black;
     border-radius: 5px;
     background-color: #3F6CAD;
