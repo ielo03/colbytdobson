@@ -11,13 +11,15 @@ app.set("view engine", "hbs");
 app.engine(
     "hbs",
     hbs.engine({
-        layoutsDir: environment.getPathTo("views/layouts"),
+        layoutsDir: environment.getPathTo("colbytdobson/views/layouts"),
         defaultLayout: "main",
         extname: "hbs"
     })
 );
 
-app.use(express.static(environment.getPathTo("public")));
+app.set("views", environment.getPathTo("colbytdobson/views"));
+
+app.use(express.static(environment.getPathTo("colbytdobson/public")));
 
 app.use(express.urlencoded({extended: true}));
 
@@ -33,12 +35,12 @@ app.use(session({
 app.use(routes);
 
 app.use((req, res, next) => {
-    const err = new Error("Page Not Found");
+    const err = new Error("Page Not Found: " + req.url);
     err.code = 404;
     next(err);
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     const code = err.code || 500;
     const message = err.message || "Internal Server Error";
     const context = {
