@@ -14,14 +14,14 @@ a:hover {
 }
 
 .nav-bar {
-    position: fixed; /* Makes it stick to the top */
-    top: 0; /* Positions it at the very top */
+    position: relative; /* Default positioning */
+    top: 0; /* Ensures it starts from the top */
     left: 0; /* Ensures it starts from the left edge */
     width: 100%; /* Spans the entire width of the viewport */
     height: 50px; /* Adjust the height as needed */
     padding: 0 10px; /* Optional padding */
     background-color: #191919; /* Keeps your background color */
-    z-index: 1000; /* Ensures it stays above other content */
+    z-index: 1; /* Ensures it stays above other content */
 }
 
 .nav-links {
