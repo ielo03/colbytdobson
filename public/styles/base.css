@@ -8,6 +8,10 @@ body {
     margin: 0;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 a {
     text-decoration: none;
 }
@@ -41,7 +45,7 @@ a:hover {
 
 .plain-text:hover {
     text-decoration: none;
-    cursor: pointer;
+    cursor: default;
 }
 
 .footer {
