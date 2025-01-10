@@ -22,7 +22,7 @@
     min-width: 200px; /* Prevent buttons from shrinking too much */
     padding: 20px; /* Space inside buttons */
     background-color: #3F6CAD; /* Button background color */
-    color: white; /* Text color */
+    color: #DCEFFF; /* Text color */
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners */
     font-size: 1rem; /* Base font size */
@@ -47,14 +47,14 @@
 .button-title {
     font-size: 1.5rem; /* Larger text for the title */
     font-weight: bold; /* Bold font for emphasis */
-    margin-bottom: 10px; /* Space below the title */
+    margin-bottom: 15px; /* Space below the title */
     text-align: center; /* Ensure the title is center-aligned */
 }
 
 /* Description Styles */
 .button-description, .button-detail {
     font-size: 1rem; /* Standard font size for descriptions */
-    margin-bottom: 5px; /* Space between description lines */
+    margin-bottom: 10px; /* Space between description lines */
     text-align: center; /* Center-align descriptions */
 }
 
