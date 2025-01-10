@@ -17,8 +17,8 @@
     display: flex; /* Flex layout for button content */
     flex-direction: column; /* Stack content vertically */
     flex-grow: 1; /* Allow buttons to grow equally */
-    flex-basis: 30%; /* Default button width */
-    max-width: 30%; /* Limit button width */
+    flex-basis: 40%; /* Default button width */
+    max-width: 40%; /* Limit button width */
     min-width: 200px; /* Prevent buttons from shrinking too much */
     padding: 20px; /* Space inside buttons */
     background-color: #3F6CAD; /* Button background color */
