@@ -45,11 +45,6 @@ a:hover {
     object-fit: cover; /* Scale the image correctly */
 }
 
-.nav-links {
-    display: flex; /* Display navigation links horizontally */
-    gap: 10px; /* Add space between links */
-}
-
 .plain-text {
     color: #DCEFFF;
     text-decoration: none;
