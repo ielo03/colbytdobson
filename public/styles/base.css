@@ -41,7 +41,7 @@ a:hover {
 
 .plain-text:hover {
     text-decoration: none;
-    cursor: default;
+    cursor: pointer;
 }
 
 .footer {
