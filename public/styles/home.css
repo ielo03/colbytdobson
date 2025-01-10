@@ -60,8 +60,7 @@
 
 .button-image {
     width: auto; /* Adjust size */
-    height: 5%; /* Maintain aspect ratio */
-    vertical-align: middle; /* Align with text */
+    height: 10%; /* Maintain aspect ratio */
 }
 
 /* Media Queries for Responsiveness */
