@@ -6,11 +6,10 @@
 }
 
 .project-button {
-    flex: 1;
+    flex: 0.7;
     display: flex;
     flex-direction: column;
     margin: 3% 0;
-    width: 10%;
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
