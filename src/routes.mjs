@@ -12,13 +12,13 @@ import servereceiveShortcut from "./servereceive/servereceiveShortcut.mjs";
 const router = express.Router();
 
 router.get("/", colbytdobsonHome.get);
-router.get("/sr/*", servereceiveHome.get);
+router.get("/sr/*path", servereceiveShortcut.get);
 router.get("/servereceive", servereceiveHome.get);
 router.get("/servereceive/:team", servereceiveTeam.get);
-router.get("/servereceive/:team/:session", servereceiveSession.get)
+router.get("/servereceive/:team/:session", servereceiveSession.get);
 router.get("/dynamicresume", dynamicresumeHome.get);
 router.all("/api/authorization", authorizationAPIHandler);
 router.all("/api/servereceive", servereceiveAPIHandler);
-router.all("api/dynamicresume", dynamicresumeAPIHandler);
+router.all("/api/dynamicresume", dynamicresumeAPIHandler);
 
 export default router;
