@@ -58,6 +58,12 @@
     text-align: center; /* Center-align descriptions */
 }
 
+.button-image {
+    width: auto; /* Adjust size */
+    height: 5%; /* Maintain aspect ratio */
+    vertical-align: middle; /* Align with text */
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .project-container {
