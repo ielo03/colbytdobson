@@ -36,6 +36,7 @@
 /* Button Hover and Active States */
 .project-button:hover {
     background-color: #2F5C9A; /* Darken button on hover */
+    cursor: pointer;
 }
 
 .project-button:active {
