@@ -1,6 +1,6 @@
 .project-container {
     display: flex;
-    gap: 10px;
+    gap: 2px;
     justify-content: center;
     align-items: stretch;
 }
@@ -9,7 +9,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin: 0 30px;
+    margin: 5% 10%;
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
