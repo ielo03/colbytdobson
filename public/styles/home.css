@@ -6,7 +6,7 @@
 }
 
 .project-button {
-    flex: 0.7;
+    flex: 0 1 8%;
     display: flex;
     flex-direction: column;
     margin: 3% 0;
