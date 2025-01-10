@@ -42,7 +42,6 @@ a:hover {
 .logo img {
     width: 40px; /* Adjust size of the image */
     height: 40px; /* Ensure it's square */
-    border-radius: 50%; /* Make it circular */
     object-fit: cover; /* Scale the image correctly */
 }
 
