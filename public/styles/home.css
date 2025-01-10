@@ -39,7 +39,7 @@
 }
 
 .project-button:active {
-    background-color: #553976; /* Darker color on click */
+    background-color: #6D64D8; /* Darker color on click */
     transform: scale(0.98); /* Slight scale-down effect on click */
 }
 
