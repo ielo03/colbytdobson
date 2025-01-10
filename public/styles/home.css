@@ -31,6 +31,7 @@
     box-sizing: border-box; /* Include padding in width/height calculations */
     align-items: center; /* Center-align button content horizontally */
     text-align: center; /* Ensure text inside spans is center-aligned */
+    pointer-events: auto;
 }
 
 /* Button Hover and Active States */
