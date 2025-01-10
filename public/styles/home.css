@@ -1,19 +1,20 @@
 .project-container {
     display: flex;
-    gap: 2%; /* Adjust spacing between buttons */
-    justify-content: space-evenly; /* Evenly distribute buttons across the container */
+    gap: 2%; /* Space between buttons */
+    justify-content: center; /* Center the buttons */
     align-items: stretch; /* Ensure buttons are the same height */
-    padding: 0 5%; /* Optional: Add space around the container */
-    width: 100%; /* Ensure the container fills the parent element */
+    padding: 2%; /* Add padding around the container */
 }
 
 .project-button {
     flex: 1; /* Allow buttons to grow equally */
+    max-width: 30%; /* Prevent buttons from becoming too wide */
     display: flex;
     flex-direction: column;
-    margin: 0; /* Remove external margin */
-    padding: 20px; /* Adjust padding for content spacing */
+    margin: 0; /* Remove unnecessary margins */
+    padding: 20px; /* Add spacing inside buttons */
     border: 1px solid black;
     border-radius: 5px;
     background-color: #3F6CAD;
+    text-align: center; /* Center-align button content */
 }
