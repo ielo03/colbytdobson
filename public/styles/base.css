@@ -107,3 +107,11 @@ textarea {
     width: 95%;
     height: 20px;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
