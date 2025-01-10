@@ -1,38 +1,66 @@
+/* General Container Styles */
 .project-container {
     display: flex;
     gap: 2%; /* Space between buttons */
-    justify-content: center; /* Center-align buttons */
-    align-items: stretch; /* Stretch buttons to the same height */
+    justify-content: center; /* Center buttons within the container */
+    align-items: stretch; /* Ensure all buttons have the same height */
     padding: 2%; /* Add padding around the container */
-    flex-wrap: wrap; /* Allow buttons to wrap to a new row on smaller screens */
+    flex-wrap: nowrap; /* Prevent wrapping by default */
+    width: 100%; /* Ensure container takes full width of parent */
+    overflow-x: auto; /* Allow horizontal scrolling if buttons overflow */
 }
 
+/* Button Styles */
 .project-button {
-    text-align: center; /* Center-align the button content */
-    padding: 20px; /* Add padding inside buttons */
-    align-items: center; /* Ensure buttons are the same height */
-    background-color: #3F6CAD;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex; /* Flex layout for vertical stacking */
+    display: flex; /* Flex layout for button content */
     flex-direction: column; /* Stack content vertically */
+    flex-grow: 1; /* Allow buttons to grow equally */
+    flex-basis: 30%; /* Default button width */
+    max-width: 30%; /* Limit button width */
+    min-width: 200px; /* Prevent buttons from shrinking too much */
+    text-align: center; /* Center-align content inside buttons */
+    padding: 20px; /* Space inside buttons */
+    background-color: #3F6CAD; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1rem; /* Base font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
 }
 
-.button-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 10px; /* Space between title and description */
-}
-
-.button-description, .button-detail {
-    font-size: 1rem;
-    margin-bottom: 5px; /* Space between lines */
-}
-
+/* Button Hover and Active States */
 .project-button:hover {
-    background-color: #2F5C9A; /* Change color on hover */
+    background-color: #2F5C9A; /* Darken button on hover */
+}
+
+.project-button:active {
+    background-color: #1F3C6A; /* Darker color on click */
+    transform: scale(0.98); /* Slight scale-down effect on click */
+}
+
+/* Title Styles */
+.button-title {
+    font-size: 1.5rem; /* Larger text for the title */
+    font-weight: bold; /* Bold font for emphasis */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+/* Description Styles */
+.button-description, .button-detail {
+    font-size: 1rem; /* Standard font size for descriptions */
+    margin-bottom: 5px; /* Space between description lines */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .project-container {
+        flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    }
+
+    .project-button {
+        flex-basis: 100%; /* Buttons take full width in a single column */
+        max-width: 100%; /* Prevent extra space on sides */
+        margin-bottom: 10px; /* Add spacing between rows */
+    }
 }
