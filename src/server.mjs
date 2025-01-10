@@ -1,9 +1,10 @@
 import express from "express";
 import session from "express-session";
-import environment from "../../environment.mjs";
+import environment from "../environment.mjs";
+import env from "../environment.mjs";
 
 import hbs from "express-handlebars";
-import routes from "../../routes/routes.mjs";
+import routes from "../routes/routes.mjs";
 
 const app = express();
 
@@ -52,4 +53,12 @@ app.use((err, req, res, next) => {
         .render("error", context);
 });
 
-export default app;
+function startServer() {
+    const port = env.serverConfig.port || 3000;
+    const host = env.serverConfig.host || "localhost";
+    app.listen(port, host, () => {
+        console.log(`Server running at ${host}:${port}`);
+    });
+}
+
+export default startServer;
