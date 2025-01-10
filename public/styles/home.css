@@ -60,7 +60,7 @@
 
 .button-image {
     width: auto; /* Adjust size */
-    height: 20%; /* Maintain aspect ratio */
+    height: 50px; /* Maintain aspect ratio */
     margin-bottom: 15px;
 }
 
