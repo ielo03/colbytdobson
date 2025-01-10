@@ -1,7 +1,16 @@
+.project-container {
+    display: flex;
+    gap: 2%; /* Space between buttons */
+    justify-content: center; /* Center-align buttons */
+    align-items: stretch; /* Stretch buttons to the same height */
+    padding: 2%; /* Add padding around the container */
+    flex-wrap: wrap; /* Allow buttons to wrap to a new row on smaller screens */
+}
+
 .project-button {
     text-align: center; /* Center-align the button content */
     padding: 20px; /* Add padding inside buttons */
-    align-items: stretch; /* Ensure buttons are the same height */
+    align-items: center; /* Ensure buttons are the same height */
     background-color: #3F6CAD;
     color: white;
     border: none;
