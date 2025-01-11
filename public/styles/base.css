@@ -30,6 +30,7 @@ body {
     display: flex;
     justify-content: left; /* Center content horizontally */
     align-items: center; /* Center content vertically */
+    padding: 10px;
 }
 
 button:hover {
@@ -45,7 +46,7 @@ a:hover {
     cursor: pointer;
 }
 
-h1 {
+h1, p {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margin */
 }
