@@ -6,6 +6,7 @@ html {
     font-family: sans-serif;
     color: #DCEFFF;
     background-color: #121212;
+    overflow-y: hidden; /* Disables vertical scrolling */
 }
 
 body {
