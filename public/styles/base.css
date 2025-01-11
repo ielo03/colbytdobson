@@ -5,11 +5,12 @@
 html {
     font-family: sans-serif;
     color: #DCEFFF;
-    background-color: #121212;
+    background-color: #191919;
 }
 
 body {
     margin: 0;
+    background-color: #121212;
 }
 
 button:hover {
@@ -39,8 +40,6 @@ h1 {
     align-items: center; /* Vertically center items within the navbar */
     padding: 10px; /* Add some padding */
     background-color: #191919; /* Background color of the navbar */
-    margin-top: -1000px; /* Extend the background upward */
-    padding-top: 1000px; /* Add equivalent padding to maintain content position */
 }
 
 .logo {
