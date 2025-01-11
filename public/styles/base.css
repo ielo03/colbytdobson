@@ -83,12 +83,6 @@ h1 {
     cursor: default;
 }
 
-.footer {
-    width: 95%;
-    height: 20px;
-    padding: 10px;
-}
-
 .center {
     display: flex;
     justify-content: center;
