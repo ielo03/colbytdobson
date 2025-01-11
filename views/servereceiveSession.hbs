@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Score Submission</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        margin: 0;
+      }
+      .player-button {
+        padding: 10px;
+        margin: 5px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .player-button:hover {
+        background-color: #45a049;
+      }
+      .score-button {
+        padding: 10px;
+        margin: 5px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .score-button:hover {
+        background-color: #0b7dda;
+      }
+      #scoreContainer {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Select Players and Score NEW</h1>
+    <div id="playersContainer"></div>
+    <div id="scoreContainer">
+      <h2>Select Score:</h2>
+      <button class="score-button" onclick="submitScore(0)">0</button>
+      <button class="score-button" onclick="submitScore(1)">1</button>
+      <button class="score-button" onclick="submitScore(2)">2</button>
+      <button class="score-button" onclick="submitScore(3)">3</button>
+    </div>
+    <script>
+      const playersData = JSON.parse("{{playersData}}");
+      let selections = [];
+
+      function selectPlayer(player) {
+        if (selections.length < 2 && !selections.includes(player)) {
+          selections.push(player);
+        } else {
+          alert("You can only select two players.");
+          return;
+        }
+
+        if (selections.length === 2) {
+          document.getElementById("scoreContainer").style.display = "block";
+        }
+      }
+
+      function submitScore(score) {
+        const [player1, player2] = selections;
+        fetch("/api/add-score", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            team: player1.team,
+            player1: player1.player,
+            player2: player2.player,
+            score: score,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("Score submitted successfully!");
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error("Failed to submit score:", error);
+            alert("Failed to submit score.");
+          });
+      }
+
+      function displayPlayers() {
+        const container = document.getElementById("playersContainer");
+        playersData.forEach((player) => {
+          const button = document.createElement("button");
+          button.className = "player-button";
+          button.textContent = player.player;
+          button.onclick = () => selectPlayer(player);
+          container.appendChild(button);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", displayPlayers);
+    </script>
+  </body>
+</html>
