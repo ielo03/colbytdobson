@@ -17,8 +17,12 @@
     {{/if}}
 </head>
 <body>
-{{> navbar}}
-{{{body}}}
-{{> footer}}
+<div class="container">
+    {{> navbar}}
+    <div class="main">
+        {{{body}}}
+    </div>
+    {{> footer}}
+</div>
 </body>
 </html>
