@@ -25,6 +25,11 @@ a:hover {
     cursor: pointer;
 }
 
+h1 {
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
 .nav-bar {
     top: 0; /* Ensure it starts at the top */
     left: 0; /* Ensure it spans the left edge */
