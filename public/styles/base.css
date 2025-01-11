@@ -29,7 +29,6 @@ a:hover {
     top: 0; /* Ensure it starts at the top */
     left: 0; /* Ensure it spans the left edge */
     width: 100%; /* Full width across the viewport */
-    height: 50px; /* Adjust height as needed */
     display: flex; /* Use flexbox for layout */
     justify-content: space-between; /* Space out content (e.g., left logo, right links) */
     align-items: center; /* Vertically center items within the navbar */
