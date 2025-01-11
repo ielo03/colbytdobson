@@ -12,6 +12,7 @@ import servereceiveShortcut from "./servereceive/servereceiveShortcut.mjs";
 const router = express.Router();
 
 router.get("/", colbytdobsonHome.get);
+router.get("/sr", servereceiveShortcut.get);
 router.get("/sr/*path", servereceiveShortcut.get);
 router.get("/servereceive", servereceiveHome.get);
 router.get("/servereceive/:team", servereceiveTeam.get);
