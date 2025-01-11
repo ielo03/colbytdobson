@@ -24,11 +24,11 @@ body {
 }
 
 .footer {
-    height: 50px; /* Adjust height as needed */
+    width: 100%;
     background-color: #191919; /* Footer background */
     color: #DCEFFF; /* Footer text color */
     display: flex;
-    justify-content: center; /* Center content horizontally */
+    justify-content: left; /* Center content horizontally */
     align-items: center; /* Center content vertically */
 }
 
