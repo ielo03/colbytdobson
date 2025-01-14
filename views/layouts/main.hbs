@@ -6,6 +6,17 @@
     {{else}}
         <title>Colby T. Dobson</title>
     {{/if}}
+    <script src="/scripts/base.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/scripts/login.js"></script>
+    {{#if loginRequired}}
+        <style>
+            #main {
+                display: none;
+            }
+        </style>
+        <script src="/scripts/loginRequired.js"></script>
+    {{/if}}
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
     <link rel="stylesheet" href="/styles/base.css">
@@ -18,10 +29,13 @@
 </head>
 <body>
 <div class="container">
-    {{> navbar}}
-    <div class="main">
+    {{> header}}
+    <div class="main" id="main">
         {{{body}}}
     </div>
+    {{#if loginRequired}}
+        <div class="placeholder" id="placeholder"></div>
+    {{/if}}
     {{> footer}}
 </div>
 </body>

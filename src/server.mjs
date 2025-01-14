@@ -26,12 +26,12 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 
-app.use(session({
-    secret: environment.serverConfig.secret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {maxAge: 1000 * 60 * 60 * 24}
-}));
+// app.use(session({
+//     secret: environment.serverConfig.secret,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {maxAge: 1000 * 60 * 60 * 24}
+// }));
 
 app.use(routes);
 
@@ -54,8 +54,8 @@ app.use((err, req, res, next) => {
 });
 
 const startServer = () => {
-    const port = env.serverConfig.port || 3000;
-    const host = env.serverConfig.host || "localhost";
+    const port = env.server.port || 3000;
+    const host = env.server.host || "localhost";
     app.listen(port, host, () => {
         console.log(`Server running at ${host}:${port}`);
     });

@@ -1,0 +1,171 @@
+/* Container Styles */
+.container2 {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.card {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn.primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background-color: #0056b3;
+}
+
+.btn.logout {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn.logout:hover {
+    background-color: #c82333;
+}
+
+/* Form Styles */
+textarea,
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+textarea {
+    height: 100px;
+}
+
+a.resume-title {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+/* Divider Styles */
+.divider {
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+/* Content Sections */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.existing-data {
+    margin-top: 20px;
+}
+
+.main-topic {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 15px 0;
+    color: #555;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+}
+
+.bullet-point {
+    margin-left: 20px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #555;
+}
+
+.bullet-point span {
+    margin-right: 10px;
+}
+
+.edit,
+.delete {
+    margin-left: 5px;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    border: none;
+    background: none;
+}
+
+.edit:hover,
+.delete:hover {
+    color: #0056b3;
+}
+
+.container2 {
+    max-width: 600px;
+    margin: auto;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+.existing-data {
+    margin-top: 20px;
+}
+.main-topic {
+    font-weight: bold;
+    margin: 10px 0;
+}
+.bullet-point {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.bullet-point span {
+    margin-right: 10px;
+}
+.edit,
+.delete {
+    margin-left: 5px;
+    cursor: pointer;
+}
