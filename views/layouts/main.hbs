@@ -11,7 +11,7 @@
     <script src="/scripts/login.js"></script>
     {{#if loginRequired}}
         <style>
-            #main, #placeholder {
+            #main, #placeholder-text {
                 display: none;
             }
         </style>
@@ -35,7 +35,7 @@
     </div>
     {{#if loginRequired}}
         <div class="main" id="placeholder">
-            <h2>Please sign in to use this page</h2>
+            <h2 id="placeholder-text">Please sign in to use this page</h2>
         </div>
     {{/if}}
     {{> footer}}

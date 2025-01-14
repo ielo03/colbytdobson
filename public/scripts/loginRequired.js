@@ -1,6 +1,7 @@
 window.addEventListener(`loggedIn`, () => {
     document.getElementById('main').style.display = 'block';
     document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('placeholder-text').style.display = 'none';
     // const refreshTokenExpiry = window.App?.cookies?.refreshTokenExpiry;
     // console.log(refreshTokenExpiry);
     // if (refreshTokenExpiry !== undefined && refreshTokenExpiry > new Date()) {
@@ -10,6 +11,7 @@ window.addEventListener(`loggedIn`, () => {
 });
 
 window.addEventListener('loggedOut', () => {
+    document.getElementById('placeholder-text').style.display = 'block';
     document.getElementById('placeholder').style.display = 'block';
     document.getElementById('main').style.display = 'none';
 });
