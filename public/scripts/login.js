@@ -1,4 +1,31 @@
-let accessToken;
+window.App = window.App || {};
+App.accessToken = null;
+App.decodedToken = null;
+
+function decodeToken() {
+    if (!App.accessToken) {
+        console.error("No access token to decode.");
+        return null;
+    }
+
+    try {
+        // Split the token into its components
+        const parts = App.accessToken.split(".");
+        if (parts.length !== 3) {
+            console.error("Invalid token format.");
+            return null;
+        }
+
+        // Decode the payload (middle part of the token)
+        const payload = atob(parts[1]); // Decode Base64
+        App.decodedToken = JSON.parse(payload); // Parse JSON payload
+        console.log(App.decodedToken);
+        return App.decodedToken;
+    } catch (error) {
+        console.error("Failed to decode token:", error);
+        return null;
+    }
+}
 
 async function refreshAccessToken() {
     if (!App?.cookies?.refreshTokenExpiry) {
@@ -14,7 +41,7 @@ async function refreshAccessToken() {
 
         if (res.ok) {
             const data = await res.json();
-            accessToken = data.accessToken;
+            App.accessToken = data.accessToken;
             decodeToken();
             return true;
         } else {
@@ -29,7 +56,7 @@ async function refreshAccessToken() {
 
 // Function to check and ensure a valid access token
 async function ensureAccessToken() {
-    if (!accessToken) {
+    if (!App.accessToken) {
         console.log("No access token found. Attempting to refresh...");
 
         const refreshed = await refreshAccessToken();
@@ -55,8 +82,8 @@ async function logout() {
 
     if (res.ok) {
         // Clear access token
-        accessToken = null;
-        decodedToken = null;
+        App.accessToken = null;
+        App.decodedToken = null;
 
         // Clear cookies
         document.cookie = "refreshTokenExists=; Max-Age=0; Path=/;";
@@ -90,14 +117,14 @@ async function handleCredentialResponse(response) {
             console.log(JSON.stringify(data));
 
             // Store the access token
-            accessToken = data.accessToken;
+            App.accessToken = data.accessToken;
             decodeToken();
 
             // document.cookie =
             //     "refreshTokenExpiry=true; Max-Age=2592000; Path=/;";
 
             // Show the dynamic resume page
-            showPage();
+            showLogout();
         } else {
             const errorData = await res.json();
             console.error("Authentication failed:", errorData.error);
@@ -142,12 +169,13 @@ window.addEventListener("load", async () => {
         if (App?.cookies?.refreshTokenExpiry || accessToken) {
             const hasToken = await ensureAccessToken();
             if (hasToken) {
-                showLogout();
+                return showLogout();
             }
+        } else {
+            console.log("No valid tokens found. Showing login prompt...");
+            showLogin();
         }
-        console.log("No valid tokens found. Showing login prompt...");
     } catch (error) {
         console.error("Error during initialization:", error);
     }
-    showLogin();
 });

@@ -8,31 +8,6 @@ function hasCookie(name) {
         .some((cookie) => cookie.startsWith(`${name}=`));
 }
 
-function decodeToken() {
-    if (!accessToken) {
-        console.error("No access token to decode.");
-        return null;
-    }
-
-    try {
-        // Split the token into its components
-        const parts = accessToken.split(".");
-        if (parts.length !== 3) {
-            console.error("Invalid token format.");
-            return null;
-        }
-
-        // Decode the payload (middle part of the token)
-        const payload = atob(parts[1]); // Decode Base64
-        decodedToken = JSON.parse(payload); // Parse JSON payload
-        console.log(decodedToken);
-        return decodedToken;
-    } catch (error) {
-        console.error("Failed to decode token:", error);
-        return null;
-    }
-}
-
 let existingDataDiv;
 let existingData;
 
