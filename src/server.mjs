@@ -33,6 +33,24 @@ app.use(express.json());
 //     cookie: {maxAge: 1000 * 60 * 60 * 24}
 // }));
 
+app.use((req, res, next) => {
+    const cookieHeader = req.headers.cookie;
+
+    if (!cookieHeader) {
+        req.cookies = {}; // Ensure req.cookies is always defined
+        return next(); // Continue even if there are no cookies
+    }
+
+    // Parse the cookies from the Cookie header
+    req.cookies = cookieHeader.split("; ").reduce((acc, cookie) => {
+        const [key, value] = cookie.split("=");
+        acc[key] = decodeURIComponent(value); // Decode URI-encoded values
+        return acc;
+    }, {});
+
+    next();
+});
+
 app.use(routes);
 
 app.use((req, res, next) => {
