@@ -8,8 +8,10 @@ const parseCookies = () => {
     return cookieObj;
 }
 
-window.App = window.App || {};
-App.cookies = parseCookies();
+window.addEventListener('load', () => {
+    window.App = window.App || {};
+    App.cookies = parseCookies();
+});
 
 window.onload = () => {
     document.body.focus();

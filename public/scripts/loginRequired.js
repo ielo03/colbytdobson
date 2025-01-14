@@ -1,4 +1,4 @@
-window.addEventListener(`DOMContentLoaded`, () => {
+window.addEventListener(`load`, () => {
     const refreshTokenExpiry = window.MyApp?.cookies?.refreshTokenExpiry;
     console.log(`refreshTokenExpiry: ${refreshTokenExpiry}`);
     if (refreshTokenExpiry !== undefined && refreshTokenExpiry > new Date()) {
