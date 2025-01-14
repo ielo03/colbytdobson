@@ -59,7 +59,7 @@ async function refreshAccessToken() {
 
 // Function to check and ensure a valid access token
 async function ensureAccessToken() {
-    if (!App.accessToken) {
+    if (App?.decodedToken?.exp > new Date() || !App?.accessToken) {
         console.log("No access token found. Attempting to refresh...");
 
         const refreshed = await refreshAccessToken();
@@ -91,7 +91,6 @@ async function logout() {
         document.cookie = "refreshToken=; Max-Age=0; Path=/;";
 
         showLogin();
-        window.dispatchEvent(new Event('loggedOut'));
     } else {
         alert("Unable to log out. Refresh and try again.");
     }
@@ -118,7 +117,7 @@ async function handleCredentialResponse(response) {
             // Store the access token
             App.accessToken = data.accessToken;
             decodeToken();
-            window.dispatchEvent(new Event('loggedIn'));
+            showLogout();
 
             // document.cookie =
             //     "refreshTokenExpiry=true; Max-Age=2592000; Path=/;";
@@ -129,25 +128,29 @@ async function handleCredentialResponse(response) {
             console.error("Authentication failed:", errorData.error);
             alert("Authentication failed. Please try again.");
             showLogin();
+            return false;
         }
     } catch (error) {
         console.error("Error during authentication:", error);
         alert("An error occurred. Please try again.");
         showLogin();
+        return false;
     }
 }
 
 function showLogin() {
     console.log('Showing login...');
+    window.dispatchEvent(new Event('loggedOut'));
     document.getElementById("logout-div").style.display = "none";
     document.getElementById("login-div").style.display = "block";
     // google.accounts.id.prompt();
 }
 
 function showLogout() {
+    console.log('Showing logout...');
+    window.dispatchEvent(new Event('loggedIn'));
     document.getElementById("login-div").style.display = 'none';
     document.getElementById("logout-div").style.display = 'block';
-    
 }
 
 window.addEventListener("load", async () => {
@@ -170,13 +173,13 @@ window.addEventListener("load", async () => {
         if (App?.cookies?.refreshTokenExpiry || App.accessToken) {
             const hasToken = await ensureAccessToken();
             if (hasToken) {
-                window.dispatchEvent(new Event('loggedIn'));
-                return showLogout();
+                showLogout();
+            } else {
+                showLogin();
             }
         } else {
             console.log("No valid tokens found. Showing login prompt...");
             showLogin();
-            window.dispatchEvent(new Event('loggedOut'));
         }
     } catch (error) {
         console.error("Error during initialization:", error);
