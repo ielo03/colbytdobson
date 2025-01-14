@@ -16,7 +16,7 @@ async function post(req, res) {
         //     return acc;
         // }, {});
 
-        res.status(200).json({ accessToken: generateAccessTokenFromRefresh(req.cookies.refreshToken) });
+        res.status(200).json({ accessToken: await generateAccessTokenFromRefresh(req.cookies.refreshToken) });
     } catch (error) {
         console.error("Error refreshing token:", error.message);
 
