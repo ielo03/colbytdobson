@@ -19,7 +19,7 @@ function decodeToken() {
         // Decode the payload (middle part of the token)
         const payload = atob(parts[1]); // Decode Base64
         App.decodedToken = JSON.parse(payload); // Parse JSON payload
-        console.log(App.decodedToken);
+        // console.log(App.decodedToken);
         return App.decodedToken;
     } catch (error) {
         console.error("Failed to decode token:", error);
@@ -94,7 +94,7 @@ async function logout() {
 }
 
 async function handleCredentialResponse(response) {
-    console.log(JSON.stringify(response));
+    // console.log(JSON.stringify(response));
     try {
         // Hide the login container
         document.getElementById("login-div").style.display = "none";
@@ -109,7 +109,7 @@ async function handleCredentialResponse(response) {
 
         if (res.ok) {
             const data = await res.json();
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
 
             // Store the access token
             App.accessToken = data.accessToken;
