@@ -55,7 +55,7 @@ async function refreshAccessToken() {
 }
 
 // Function to check and ensure a valid access token
-async function refreshAccessToken() {
+async function ensureAccessToken() {
     if (!App.accessToken) {
         console.log("No access token found. Attempting to refresh...");
 
@@ -168,7 +168,7 @@ window.addEventListener("load", async () => {
 
     try {
         if (App?.cookies?.refreshTokenExpiry || accessToken) {
-            const hasToken = await refreshAccessToken();
+            const hasToken = await ensureAccessToken();
             if (hasToken) {
                 return showLogout();
             }
