@@ -70,13 +70,13 @@ async function ensureAccessToken() {
 }
 
 async function logout() {
-    if (!accessToken) await refreshAccessToken();
+    if (!App.accessToken) await refreshAccessToken();
 
     const res = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
         headers: {
-            CustomAuthorization: `Bearer ${accessToken}`,
+            CustomAuthorization: `Bearer ${App.accessToken}`,
         },
     });
 
@@ -167,7 +167,7 @@ window.addEventListener("load", async () => {
         .addEventListener("click", logout);
 
     try {
-        if (App?.cookies?.refreshTokenExpiry || accessToken) {
+        if (App?.cookies?.refreshTokenExpiry || App.accessToken) {
             const hasToken = await ensureAccessToken();
             if (hasToken) {
                 return showLogout();
