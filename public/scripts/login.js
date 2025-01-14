@@ -90,6 +90,7 @@ async function logout() {
         document.cookie = "refreshTokenExpiry=; Max-Age=0; Path=/;";
         document.cookie = "refreshToken=; Max-Age=0; Path=/;";
 
+        window.dispatchEvent(new Event('loggedOut'));
         showLogin();
     } else {
         alert("Unable to log out. Refresh and try again.");
@@ -117,12 +118,12 @@ async function handleCredentialResponse(response) {
             // Store the access token
             App.accessToken = data.accessToken;
             decodeToken();
+            window.dispatchEvent(new Event('loggedIn'));
 
             // document.cookie =
             //     "refreshTokenExpiry=true; Max-Age=2592000; Path=/;";
 
             // Show the dynamic resume page
-            showLogout();
         } else {
             const errorData = await res.json();
             console.error("Authentication failed:", errorData.error);
