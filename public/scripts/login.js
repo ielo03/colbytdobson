@@ -90,8 +90,8 @@ async function logout() {
         document.cookie = "refreshTokenExpiry=; Max-Age=0; Path=/;";
         document.cookie = "refreshToken=; Max-Age=0; Path=/;";
 
-        window.dispatchEvent(new Event('loggedOut'));
         showLogin();
+        window.dispatchEvent(new Event('loggedOut'));
     } else {
         alert("Unable to log out. Refresh and try again.");
     }
