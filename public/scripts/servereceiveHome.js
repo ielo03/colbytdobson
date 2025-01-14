@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("load", async () => {
     document.getElementById('teamForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
