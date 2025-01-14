@@ -170,11 +170,13 @@ window.addEventListener("load", async () => {
         if (App?.cookies?.refreshTokenExpiry || App.accessToken) {
             const hasToken = await ensureAccessToken();
             if (hasToken) {
+                window.dispatchEvent(new Event('loggedIn'));
                 return showLogout();
             }
         } else {
             console.log("No valid tokens found. Showing login prompt...");
             showLogin();
+            window.dispatchEvent(new Event('loggedOut'));
         }
     } catch (error) {
         console.error("Error during initialization:", error);
