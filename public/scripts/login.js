@@ -92,7 +92,7 @@ async function logout() {
         document.getElementById("logout-button").style.display = "none";
         document.getElementById("login-button").style.display = "block";
 
-        window.location = "/";
+        if (window.location !== "/") window.location = "/";
     } else {
         alert("Unable to log out. Refresh and try again.");
     }
