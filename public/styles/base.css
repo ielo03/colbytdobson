@@ -47,7 +47,7 @@ a:hover {
     cursor: pointer;
 }
 
-h1, p {
+h1, p, h2, h3 {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margin */
 }
