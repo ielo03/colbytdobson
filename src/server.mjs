@@ -1,5 +1,4 @@
 import express from "express";
-// import session from "express-session";
 import environment from "../environment.mjs";
 import env from "../environment.mjs";
 
