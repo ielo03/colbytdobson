@@ -1,5 +1,6 @@
 import login from './api/login.mjs';
 import logout from './api/logout.mjs';
+import refresh from "./api/refresh.mjs";
 
 const authAPIHandler = (req, res) => {
     const basePath = '/api/auth';
@@ -18,6 +19,10 @@ const authAPIHandler = (req, res) => {
 
         case 'POST/logout': {
             return logout.post(req, res);
+        }
+
+        case 'POST/refresh': {
+            return refresh.post(req, res);
         }
 
         default: {

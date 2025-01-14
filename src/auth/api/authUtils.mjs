@@ -2,7 +2,7 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import env from "../../../environment.mjs";
 
-const ACCESS_PRIVATE_KEY = fs.readFileSync("/Users/colbydobson/IdeaProjects/colbytdobson/src/auth/api/private.pem");
+const ACCESS_PRIVATE_KEY = fs.readFileSync(env.getPathTo("src/auth/api/private.pem"));
 
 export const generateTokens = (userId, name, email, picture) => {
     const accessToken = generateAccessToken(userId, name, email, picture);

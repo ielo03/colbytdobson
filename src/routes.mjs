@@ -18,8 +18,8 @@ router.get("/servereceive", servereceiveHome.get);
 router.get("/servereceive/:team", servereceiveTeam.get);
 router.get("/servereceive/:team/:session", servereceiveSession.get);
 router.get("/dynamicresume", dynamicresumeHome.get);
-router.all("/api/auth", authAPIHandler);
-router.all("/api/servereceive", servereceiveAPIHandler);
-router.all("/api/dynamicresume", dynamicresumeAPIHandler);
+router.all("/api/auth/*path", authAPIHandler);
+router.all("/api/servereceive/*path", servereceiveAPIHandler);
+router.all("/api/dynamicresume/*path", dynamicresumeAPIHandler);
 
 export default router;

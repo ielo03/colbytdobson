@@ -3,7 +3,7 @@ import {fileURLToPath} from "url";
 import dotenv from 'dotenv';
 dotenv.config()
 
-const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "../");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const getPathTo = pathFromRoot => path.join(__dirname, pathFromRoot);
 
 const server = {
@@ -27,7 +27,7 @@ const db = {
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_DATABASE
 };
 
 const environment = {

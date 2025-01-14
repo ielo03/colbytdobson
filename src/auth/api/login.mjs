@@ -26,10 +26,17 @@ async function post(req, res) {
             console.log(`ID Token verified: ${JSON.stringify(ticket)}`);
         } catch (err) {
             console.log(`Error verifying ID token: ${err}`);
-            return res.status(401).json({
-                error: "invalid_token",
-                error_description: "The access token is missing or invalid.",
-            });
+            if (err.code === "ENOTFOUND") {
+                return res.status(500).json({
+                    error: "verification_certificate_error",
+                    error_description: "Failed to retrieve verification certificates.",
+                });
+            } else {
+                return res.status(401).json({
+                    error: "invalid_token",
+                    error_description: "The access token is missing or invalid.",
+                });
+            }
         }
         console.log("Retrieving payload");
 

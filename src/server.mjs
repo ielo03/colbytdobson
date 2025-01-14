@@ -1,5 +1,5 @@
 import express from "express";
-import session from "express-session";
+// import session from "express-session";
 import environment from "../environment.mjs";
 import env from "../environment.mjs";
 
@@ -12,15 +12,15 @@ app.set("view engine", "hbs");
 app.engine(
     "hbs",
     hbs.engine({
-        layoutsDir: environment.getPathTo("colbytdobson/views/layouts"),
+        layoutsDir: environment.getPathTo("views/layouts"),
         defaultLayout: "main",
         extname: "hbs"
     })
 );
 
-app.set("views", environment.getPathTo("colbytdobson/views"));
+app.set("views", environment.getPathTo("views"));
 
-app.use(express.static(environment.getPathTo("colbytdobson/public")));
+app.use(express.static(environment.getPathTo("public")));
 
 app.use(express.urlencoded({extended: true}));
 

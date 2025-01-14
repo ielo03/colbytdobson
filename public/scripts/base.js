@@ -10,3 +10,7 @@ const parseCookies = () => {
 
 window.App = window.App || {};
 App.cookies = parseCookies();
+
+window.onload = () => {
+    document.body.focus();
+};
