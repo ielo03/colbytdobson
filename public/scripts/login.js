@@ -43,6 +43,7 @@ async function refreshAccessToken() {
             const data = await res.json();
             App.accessToken = data.accessToken;
             decodeToken();
+            console.log("Refreshed.");
             return true;
         } else {
             console.error("Failed to refresh access token:", await res.text());
