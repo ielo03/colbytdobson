@@ -155,7 +155,7 @@ window.addEventListener("load", async () => {
 
     google.accounts.id.renderButton(
         document.getElementById("login-div"),
-        {theme: "filled_black", size: "large"}
+        {theme: "filled_black", size: "large", shape: "pill"}
     );
 
     document
