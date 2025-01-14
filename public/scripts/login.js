@@ -140,7 +140,7 @@ function showLogin() {
     console.log('Showing login...');
     document.getElementById("logout-div").style.display = "none";
     document.getElementById("login-div").style.display = "block";
-    google.accounts.id.prompt();
+    // google.accounts.id.prompt();
 }
 
 function showLogout() {
