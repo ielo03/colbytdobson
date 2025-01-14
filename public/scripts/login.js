@@ -137,7 +137,7 @@ async function handleCredentialResponse(response) {
         showLogin();
     }
 }
-//
+
 function showLogin() {
     console.log('Showing login...');
     document.getElementById("logout-button").style.display = "none";
