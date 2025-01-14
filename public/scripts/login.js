@@ -139,6 +139,7 @@ async function handleCredentialResponse(response) {
 }
 
 function showLogin() {
+    console.log('Showing login...');
     document.getElementById("logout-button").style.display = "none";
     document.getElementById("login-button").style.display = "block";
     google.accounts.id.prompt();
