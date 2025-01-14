@@ -89,8 +89,7 @@ async function logout() {
         document.cookie = "refreshTokenExists=; Max-Age=0; Path=/;";
         document.cookie = "refreshToken=; Max-Age=0; Path=/;";
 
-        document.getElementById("logout-button").style.display = "none";
-        document.getElementById("login-button").style.display = "block";
+        showLogin();
     } else {
         alert("Unable to log out. Refresh and try again.");
     }
