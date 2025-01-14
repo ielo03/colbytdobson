@@ -70,8 +70,6 @@ async function ensureAccessToken() {
 }
 
 async function logout() {
-    if (!App.accessToken) await refreshAccessToken();
-
     const res = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
@@ -86,7 +84,7 @@ async function logout() {
         App.decodedToken = null;
 
         // Clear cookies
-        document.cookie = "refreshTokenExists=; Max-Age=0; Path=/;";
+        document.cookie = "refreshTokenExpiry=; Max-Age=0; Path=/;";
         document.cookie = "refreshToken=; Max-Age=0; Path=/;";
 
         showLogin();
@@ -99,7 +97,7 @@ async function handleCredentialResponse(response) {
     console.log(JSON.stringify(response));
     try {
         // Hide the login container
-        document.getElementById("login-button").style.display = "none";
+        document.getElementById("login-div").style.display = "none";
 
         const res = await fetch("/api/auth/login", {
             method: "POST",
@@ -137,14 +135,15 @@ async function handleCredentialResponse(response) {
 
 function showLogin() {
     console.log('Showing login...');
-    document.getElementById("logout-button").style.display = "none";
-    document.getElementById("login-button").style.display = "block";
+    document.getElementById("logout-div").style.display = "none";
+    document.getElementById("login-div").style.display = "block";
     google.accounts.id.prompt();
 }
 
 function showLogout() {
-    document.getElementById("login-button").style.display = 'none';
-    document.getElementById("logout-button").style.display = 'block';
+    document.getElementById("login-div").style.display = 'none';
+    document.getElementById("logout-div").style.display = 'block';
+    
 }
 
 window.addEventListener("load", async () => {
@@ -155,12 +154,12 @@ window.addEventListener("load", async () => {
     });
 
     google.accounts.id.renderButton(
-        document.getElementById("login-button"),
-        {theme: "outline", size: "large"}
+        document.getElementById("login-div"),
+        {theme: "filled_black", size: "large"}
     );
 
     document
-        .getElementById("logout-button")
+        .getElementById("logout-div")
         .addEventListener("click", logout);
 
     try {
