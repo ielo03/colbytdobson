@@ -13,7 +13,7 @@ window.addEventListener("load", async () => {
         }
 
         try {
-            const response = await fetch(`https://colbytdobson.com/api/team-exists?team=${encodeURIComponent(team)}`);
+            const response = await fetch(`https://colbytdobson.com/api/servereceive/team-exists?team=${encodeURIComponent(team)}`);
 
             if (response.status !== 404) {
                 if (!response.ok) {
