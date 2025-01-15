@@ -43,7 +43,7 @@ window.addEventListener("load", async () => {
         event.preventDefault();
 
         const createTeam = document.getElementById('createTeam').value.trim();
-        const createPlayer = document.getElementById('createPlayer').value.trim();
+        // const createPlayer = document.getElementById('createPlayer').value.trim();
         const resultDiv = document.getElementById('createResult');
 
         if (!createTeam) {
@@ -53,12 +53,12 @@ window.addEventListener("load", async () => {
             return;
         }
 
-        if (!createPlayer) {
-            resultDiv.style.display = 'block';
-            resultDiv.textContent = 'Please enter a player.';
-            resultDiv.className = 'error';
-            return;
-        }
+        // if (!createPlayer) {
+        //     resultDiv.style.display = 'block';
+        //     resultDiv.textContent = 'Please enter a player.';
+        //     resultDiv.className = 'error';
+        //     return;
+        // }
 
         try {
             const response = await fetch(`https://colbytdobson.com/api/create-team`, {
@@ -68,7 +68,7 @@ window.addEventListener("load", async () => {
                 },
                 body: JSON.stringify({
                     team: createTeam,
-                    player: createPlayer,
+                    // player: createPlayer,
                 }),
             });
 
