@@ -1,43 +1,43 @@
 window.addEventListener("load", async () => {
-    document.getElementById('teamForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const team = document.getElementById('team').value.trim();
-        const resultDiv = document.getElementById('result');
-
-        if (!team) {
-            resultDiv.style.display = 'block';
-            resultDiv.textContent = 'Please enter a team.';
-            resultDiv.className = 'error';
-            return;
-        }
-
-        try {
-            const response = await fetch(`https://colbytdobson.com/api/servereceive/team-exists?team=${encodeURIComponent(team)}`);
-
-            if (response.status !== 404) {
-                if (!response.ok) {
-                    throw new Error(`Server returned ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.exists) {
-                    window.location.href = `https://colbytdobson.com/servereceive/${encodeURIComponent(team)}`;
-                    return;
-                }
-            }
-
-            resultDiv.style.display = 'block';
-            resultDiv.textContent = `The team "${team}" does not exist.`;
-            resultDiv.className = 'error';
-        } catch (error) {
-            console.error('Error checking team:', error);
-            resultDiv.style.display = 'block';
-            resultDiv.textContent = 'An error occurred while checking the team. Please try again later.';
-            resultDiv.className = 'error';
-        }
-    });
+    // document.getElementById('teamForm').addEventListener('submit', async (event) => {
+    //     event.preventDefault();
+    //
+    //     const team = document.getElementById('team').value.trim();
+    //     const resultDiv = document.getElementById('result');
+    //
+    //     if (!team) {
+    //         resultDiv.style.display = 'block';
+    //         resultDiv.textContent = 'Please enter a team.';
+    //         resultDiv.className = 'error';
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const response = await fetch(`https://colbytdobson.com/api/servereceive/team-exists?team=${encodeURIComponent(team)}`);
+    //
+    //         if (response.status !== 404) {
+    //             if (!response.ok) {
+    //                 throw new Error(`Server returned ${response.status}`);
+    //             }
+    //
+    //             const data = await response.json();
+    //
+    //             if (data.exists) {
+    //                 window.location.href = `https://colbytdobson.com/servereceive/${encodeURIComponent(team)}`;
+    //                 return;
+    //             }
+    //         }
+    //
+    //         resultDiv.style.display = 'block';
+    //         resultDiv.textContent = `The team "${team}" does not exist.`;
+    //         resultDiv.className = 'error';
+    //     } catch (error) {
+    //         console.error('Error checking team:', error);
+    //         resultDiv.style.display = 'block';
+    //         resultDiv.textContent = 'An error occurred while checking the team. Please try again later.';
+    //         resultDiv.className = 'error';
+    //     }
+    // });
 
     document.getElementById('createTeamForm').addEventListener('submit', async (event) => {
         event.preventDefault();
