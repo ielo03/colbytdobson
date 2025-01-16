@@ -11,18 +11,21 @@ const refreshTeams = async () => {
     teams = await response.json();
     console.log(JSON.stringify(teams));
 
+
     const teamsDiv = document.getElementById('teams');
     teamsDiv.innerHTML = '';
-    for (const team of teams) {
-        const teamLink = document.createElement('a');     // Create a new <a> element
+    if (teams && teams.length > 0) {
+        for (const team of teams) {
+            const teamLink = document.createElement('a');     // Create a new <a> element
 
-        teamLink.id = `team${team.id}`;                   // Set the ID as team${id}
-        teamLink.href = `/servereceive/${team.teamName}`; // Set the href as required
-        teamLink.textContent = team.teamName;            // Set the link text to the team name
-        teamLink.className = 'team-link';
+            teamLink.id = `team${team.id}`;                   // Set the ID as team${id}
+            teamLink.href = `/servereceive/${team.teamName}`; // Set the href as required
+            teamLink.textContent = team.teamName;            // Set the link text to the team name
+            teamLink.className = 'team-link';
 
-        teamsDiv.appendChild(teamLink);
-        teamsDiv.appendChild(document.createElement('br'));
+            teamsDiv.appendChild(teamLink);
+            teamsDiv.appendChild(document.createElement('br'));
+        }
     }
 };
 
