@@ -1,4 +1,4 @@
-import {generateAccessTokenFromRefresh} from "./authUtils.mjs";
+import {generateAccessTokenFromRefresh} from "../../utils/authUtils.mjs";
 
 async function post(req, res) {
     try {

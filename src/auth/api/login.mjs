@@ -1,7 +1,7 @@
 import {OAuth2Client} from "google-auth-library";
 import env from "../../../environment.mjs"
-import {generateTokens} from "./authUtils.mjs";
-import {newConnection} from "../../dbUtils.mjs";
+import {generateTokens} from "../../utils/authUtils.mjs";
+import {newConnection} from "../../utils/dbUtils.mjs";
 
 const client = new OAuth2Client(env.auth.googleClientId);
 

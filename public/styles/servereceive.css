@@ -1,0 +1,29 @@
+.team-link {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    margin: 5px 0;
+    min-width: 30ch; /* Enough space for 20 characters (average width of 0.75em per character) */
+    max-width: 30ch; /* Just in case some fonts are narrower */
+    text-decoration: none;
+    background-color: #553976; /* Button background color */
+    color: #DCEFFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    word-wrap: break-word; /* Breaks text if it exceeds the width */
+}
+
+.team-link:hover {
+    background-color: #8853C7;
+    text-decoration: none;
+}
+
+.team-link:active {
+    background-color: #6D64D8; /* Darker color on click */
+    transform: scale(0.98);
+    text-decoration: none;
+}

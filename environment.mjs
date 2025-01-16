@@ -20,7 +20,9 @@ const auth = {
     refreshTokenExpiry: process.env.REFRESH_TOKEN_EXPIRY,
     accessTokenExpiry: process.env.ACCESS_TOKEN_EXPIRY,
     kid: process.env.KID,
-    algorithm: process.env.ALGORITHM
+    algorithm: process.env.ALGORITHM,
+    n: process.env.N,
+    e: process.env.E
 };
 
 const db = {

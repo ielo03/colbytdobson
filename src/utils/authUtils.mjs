@@ -1,7 +1,9 @@
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import env from "../../../environment.mjs";
-import {newConnection} from "../../dbUtils.mjs";
+import {Buffer} from "buffer";
+import env from "../../environment.mjs";
+import {newConnection} from "./dbUtils.mjs";
+import { createPublicKey } from "crypto";
 
 const ACCESS_PRIVATE_KEY = fs.readFileSync(env.getPathTo("src/auth/api/private.pem"));
 
@@ -12,6 +14,46 @@ export const generateTokens = (userId, name, email, picture) => {
 
     return { accessToken, refreshToken };
 }
+
+const getRSAPublicKey = () => {
+    const { n, e } = env.auth;
+
+    if (!n || !e) {
+        throw new Error("Missing RSA public key components (n or e) in environment variables.");
+    }
+
+    const jwk = {
+        kty: "RSA",          // Key Type
+        n,                  // Base64URL-encoded modulus
+        e                   // Base64URL-encoded exponent
+    };
+
+    // Construct the RSA public key
+    const publicKey = createPublicKey({
+        key: jwk,
+        format: "jwk", // JSON Web Key format
+    });
+
+    return publicKey.export({ type: "pkcs1", format: "pem" });
+};
+
+export const validateAccessToken = (accessToken) => {
+    try {
+        // Retrieve the RSA public key
+        const publicKey = getRSAPublicKey();
+
+        // Verify the token
+        // Return the decoded token payload
+        return jwt.verify(accessToken, publicKey, {
+            algorithms: [env.auth.algorithm],
+            audience: env.auth.tokenAudience,
+            issuer: env.auth.tokenIssuer,
+        });
+    } catch (error) {
+        console.error("Error validating access token:", error.message || error);
+        throw Object.assign(new Error("Unauthorized"), { code: 401 });
+    }
+};
 
 export const generateAccessToken = (userId, name, email, picture) => {
     try {

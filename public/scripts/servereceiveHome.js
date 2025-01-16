@@ -1,49 +1,38 @@
+let teams = null;
+
+const refreshTeams = async () => {
+    const response = await fetch("/api/servereceive/teams", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${App.accessToken}`
+        }
+    });
+
+    teams = await response.json();
+    console.log(JSON.stringify(teams));
+
+    const teamsDiv = document.getElementById('teams');
+    teamsDiv.innerHTML = '';
+    for (const team of teams) {
+        const teamLink = document.createElement('a');     // Create a new <a> element
+
+        teamLink.id = `team${team.id}`;                   // Set the ID as team${id}
+        teamLink.href = `/servereceive/${team.teamName}`; // Set the href as required
+        teamLink.textContent = team.teamName;            // Set the link text to the team name
+        teamLink.className = 'team-link';
+
+        teamsDiv.appendChild(teamLink);
+        teamsDiv.appendChild(document.createElement('br'));
+    }
+};
+
 window.addEventListener("load", async () => {
-    // document.getElementById('teamForm').addEventListener('submit', async (event) => {
-    //     event.preventDefault();
-    //
-    //     const team = document.getElementById('team').value.trim();
-    //     const resultDiv = document.getElementById('result');
-    //
-    //     if (!team) {
-    //         resultDiv.style.display = 'block';
-    //         resultDiv.textContent = 'Please enter a team.';
-    //         resultDiv.className = 'error';
-    //         return;
-    //     }
-    //
-    //     try {
-    //         const response = await fetch(`https://colbytdobson.com/api/servereceive/team-exists?team=${encodeURIComponent(team)}`);
-    //
-    //         if (response.status !== 404) {
-    //             if (!response.ok) {
-    //                 throw new Error(`Server returned ${response.status}`);
-    //             }
-    //
-    //             const data = await response.json();
-    //
-    //             if (data.exists) {
-    //                 window.location.href = `https://colbytdobson.com/servereceive/${encodeURIComponent(team)}`;
-    //                 return;
-    //             }
-    //         }
-    //
-    //         resultDiv.style.display = 'block';
-    //         resultDiv.textContent = `The team "${team}" does not exist.`;
-    //         resultDiv.className = 'error';
-    //     } catch (error) {
-    //         console.error('Error checking team:', error);
-    //         resultDiv.style.display = 'block';
-    //         resultDiv.textContent = 'An error occurred while checking the team. Please try again later.';
-    //         resultDiv.className = 'error';
-    //     }
-    // });
+    window.addEventListener('loggedIn', () => refreshTeams())
 
     document.getElementById('createTeamForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const createTeam = document.getElementById('createTeam').value.trim();
-        // const createPlayer = document.getElementById('createPlayer').value.trim();
         const resultDiv = document.getElementById('createResult');
 
         if (!createTeam) {
@@ -53,50 +42,29 @@ window.addEventListener("load", async () => {
             return;
         }
 
-        // if (!createPlayer) {
-        //     resultDiv.style.display = 'block';
-        //     resultDiv.textContent = 'Please enter a player.';
-        //     resultDiv.className = 'error';
-        //     return;
-        // }
-
         try {
-            const response = await fetch(`https://colbytdobson.com/api/create-team`, {
+            const response = await fetch(`/api/servereceive/team`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${App.accessToken}`
                 },
                 body: JSON.stringify({
-                    team: createTeam,
-                    // player: createPlayer,
+                    teamName: createTeam
                 }),
             });
 
-            if (response.status !== 409) {
-                if (!response.ok) {
-                    throw new Error(`Server returned ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.item !== {}) {
-                    window.location.href = `https://colbytdobson.com/servereceive/${encodeURIComponent(createTeam)}`;
-                    return;
-                } else {
-                    resultDiv.style.display = 'block';
-                    resultDiv.textContent = `Server returned no confirmation. Use go to existing team to check if it exists.`;
-                    resultDiv.className = 'success';
-                }
-            } else {
-                resultDiv.style.display = 'block';
-                resultDiv.textContent = `The team "${createTeam}" already exists.`;
-                resultDiv.className = 'error';
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
             }
+
+            refreshTeams();
         } catch (error) {
             console.error('Error creating team:', error);
             resultDiv.style.display = 'block';
             resultDiv.textContent = 'An error occurred while creating the team. Please try again later.';
             resultDiv.className = 'error';
+            refreshTeams();
         }
     });
 });

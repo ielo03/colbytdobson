@@ -1,10 +1,10 @@
 import express from "express";
 // import session from "express-session";
-import environment from "../environment.mjs";
 import env from "../environment.mjs";
 
 import hbs from "express-handlebars";
 import routes from "./routes.mjs";
+import {validateAccessToken} from "./utils/authUtils.mjs";
 
 const app = express();
 
@@ -12,15 +12,15 @@ app.set("view engine", "hbs");
 app.engine(
     "hbs",
     hbs.engine({
-        layoutsDir: environment.getPathTo("views/layouts"),
+        layoutsDir: env.getPathTo("views/layouts"),
         defaultLayout: "main",
         extname: "hbs"
     })
 );
 
-app.set("views", environment.getPathTo("views"));
+app.set("views", env.getPathTo("views"));
 
-app.use(express.static(environment.getPathTo("public")));
+app.use(express.static(env.getPathTo("public")));
 
 app.use(express.urlencoded({extended: true}));
 
@@ -49,6 +49,32 @@ app.use((req, res, next) => {
     }, {});
 
     next();
+});
+
+app.use((req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        req.user = null; // No user if no Authorization header is present
+        return next();
+    }
+
+    const token = authHeader.split(" ")[1]; // Expecting "Bearer <token>"
+
+    if (!token) {
+        console.log("Invalid Authorization header format");
+        next();
+    }
+
+    try {
+        // Validate the token and extract payload
+        req.user = validateAccessToken(token);
+
+        next(); // Continue to the next middleware
+    } catch (err) {
+        console.error("Token validation error:", err);
+        next();
+    }
 });
 
 app.use(routes);
