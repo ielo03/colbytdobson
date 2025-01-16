@@ -153,20 +153,20 @@ function showLogout() {
 }
 
 window.addEventListener("load", async () => {
-    // google.accounts.id.initialize({
-    //     client_id:
-    //         "182771232102-a1v3mnft3j68t41mka93qv4hnqq915lv.apps.googleusercontent.com",
-    //     callback: handleCredentialResponse,
-    // });
-    //
-    // google.accounts.id.renderButton(
-    //     document.getElementById("login-div"),
-    //     {theme: "filled_black", size: "large", shape: "pill"}
-    // );
-    //
-    // document
-    //     .getElementById("logout-div")
-    //     .addEventListener("click", logout);
+    google.accounts.id.initialize({
+        client_id:
+            "182771232102-a1v3mnft3j68t41mka93qv4hnqq915lv.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+    });
+
+    google.accounts.id.renderButton(
+        document.getElementById("login-div"),
+        {theme: "filled_black", size: "large", shape: "pill"}
+    );
+
+    document
+        .getElementById("logout-div")
+        .addEventListener("click", logout);
 
     try {
         if (App?.cookies?.refreshTokenExpiry || App.accessToken) {
