@@ -59,6 +59,8 @@ window.addEventListener("load", async () => {
 
             if (!response.ok) {
                 throw new Error(`Server returned ${response.status}`);
+            } else {
+                document.getElementById('createTeam').value = '';
             }
 
             refreshTeams();
