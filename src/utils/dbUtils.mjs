@@ -20,10 +20,10 @@ export const getTeams = async (userId) => {
 
         // Insert the user into the `users` table
         const query = `
-                SELECT t.id, t.teamName, t.lastAccessed
+                SELECT t.id, t.teamName, ta.lastAccessed
                 FROM teamAdmins ta
                 JOIN teams t ON ta.teamId = t.id
-                WHERE ta.userId = ? ORDER BY t.lastAccessed DESC
+                WHERE ta.userId = ? ORDER BY ta.lastAccessed DESC
               `;
         const [result] = await connection.execute(query, [
             userId,
@@ -93,7 +93,7 @@ export const touchTeam = async (teamId) => {
     let connection;
     try {
         connection = newConnection();
-        const query = `UPDATE teams SET id = id WHERE id = ?`; // Triggers ON UPDATE without actual changes
+        const query = `UPDATE teamAdmins SET teamId = teamId WHERE teamId = ?`; // Triggers ON UPDATE without actual changes
         await connection.query(query, [teamId]);
     } catch (err) {
         console.error("Database error:", err);
