@@ -1,10 +1,8 @@
 <h1>Serve Receive Tracker</h1>
 
 <form id="createTeamForm">
-    <label for="createTeam">Create new team:</label><br>
-  <input type="text" id="createTeam" name="createTeam" placeholder="Enter team name..." required>
-<!--   <label for="createPlayer">First Player:</label> -->
-<!--   <input type="text" id="createPlayer" name="createPlayer" required><br><br> -->
+    <label for="createTeam">Create new team: (a-z, 0-9, _, ', -, .)</label><br>
+  <input type="text" id="createTeam" name="createTeam" placeholder="Enter team name..." required maxlength="20">
   <button type="submit">Create</button>
 </form>
 <div id="createResult" style="display: none;"></div>

@@ -3,14 +3,18 @@ async function post(req, res) {
         // Log the incoming request for debugging purposes
         console.log('Request:', req);
 
-        // Set the headers to delete the refreshToken cookie
-        res.setHeader('Set-Cookie', [
-            'refreshToken=; HttpOnly; Path=/; Max-Age=0', // Deletes the cookie by setting Max-Age=0
-            'refreshTokenExpiry=0; Path=/; Max-Age=0',
-        ]);
+        res.cookie('refreshToken', '', {
+            httpOnly: true,
+            path: '/',
+            maxAge: 0 // Deletes the cookie by setting its age to 0
+        });
 
-        // Send the response
-        res.status(200).json({ message: 'refreshToken cookie deleted successfully' });
+        res.cookie('refreshTokenExpiry', '0', {
+            path: '/',
+            maxAge: 0 // Deletes the cookie by setting its age to 0
+        });
+
+        res.send('Cookies deleted!');
     } catch (error) {
         console.error('Error handling logout:', error);
 

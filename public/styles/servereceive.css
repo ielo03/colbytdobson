@@ -27,3 +27,60 @@
     transform: scale(0.98);
     text-decoration: none;
 }
+
+.table-wrapper {
+    width: 100%; /* Allow the table to use full width */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+}
+
+.custom-table {
+    width: 100%; /* Table spans full width */
+    border-collapse: collapse; /* Remove gaps between cells */
+    background-color: #191919; /* Match theme background */
+    color: #DCEFFF; /* Match theme text color */
+    text-align: center; /* Center-align table content */
+}
+
+.custom-table thead {
+    background-color: #3D3A37; /* Darker header background */
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #4F4B47; /* Subtle border */
+    padding: 10px;
+    min-width: 120px; /* Ensure columns are not too narrow */
+}
+
+.custom-table th {
+    font-weight: bold;
+    background-color: #262422; /* Slightly darker for header cells */
+    text-align: center; /* Center-align the header text */
+    padding: 10px;
+    white-space: normal; /* Allow text to wrap */
+    overflow-wrap: break-word; /* Break words at arbitrary points */
+    word-break: break-word; /* Force breaking inside words */
+    line-height: 1.2; /* Adjust line height for tighter wrapping */
+}
+
+.custom-table tbody tr:nth-child(even) {
+    background-color: #302E31; /* Alternating row colors for readability */
+}
+
+.custom-table tbody tr:nth-child(odd) {
+    background-color: #191919;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #302E31; /* Highlight row on hover */
+}
+
+@media (max-width: 600px) {
+    .table-wrapper {
+        overflow-x: scroll; /* Enable scrolling on smaller screens */
+    }
+
+    .custom-table {
+        min-width: 600px; /* Prevent table from shrinking below 5-column width */
+    }
+}

@@ -3,16 +3,9 @@ import logout from './api/logout.mjs';
 import refresh from "./api/refresh.mjs";
 
 const authAPIHandler = (req, res) => {
-    const basePath = '/api/auth';
+    const route = decodeURIComponent(req.params.path);
 
-    if (!req.url.startsWith(basePath)) {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Not Found' }));
-    }
-
-    const route = req.url.slice(basePath.length).toLowerCase();
-
-    switch (`${req.method.toUpperCase()}${route}`) {
+    switch (`${req.method.toUpperCase()}/${route}`) {
         case 'POST/login': {
             return login.post(req, res);
         }

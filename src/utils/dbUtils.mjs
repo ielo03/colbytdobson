@@ -20,10 +20,9 @@ export const getTeams = async (userId) => {
 
         // Insert the user into the `users` table
         const query = `
-                SELECT t.id, t.teamName, ta.lastAccessed
-                FROM teamAdmins ta
-                JOIN teams t ON ta.teamId = t.id
-                WHERE ta.userId = ? ORDER BY ta.lastAccessed DESC
+                SELECT teamId, teamName, lastAccessed
+                FROM teamAdmins
+                WHERE userId = ? ORDER BY lastAccessed DESC
               `;
         const [result] = await connection.execute(query, [
             userId,
@@ -46,7 +45,8 @@ export const getPlayers = async (userId, teamId) => {
 
         // Insert the user into the `users` table
         const query = `
-                SELECT * FROM players p
+                SELECT p.playerId, p.playerName, p.averagePassRating,
+                       p.totalPasses, p.averageServeRating, p.totalServes FROM players p
                 JOIN teamAdmins ta ON p.teamId = ta.teamId
                 WHERE ta.userId = ? AND ta.teamId = ?
               `;
@@ -54,7 +54,8 @@ export const getPlayers = async (userId, teamId) => {
             userId,
             teamId
         ]);
-        console.log("User inserted/updated in the database:", result);
+        console.log("Retrieved players:", result);
+        return result;
     } catch (err) {
         console.error("Database error:", err);
         throw Object.assign(new Error("Internal database error"), { code: 500 });
@@ -92,7 +93,7 @@ export const isAdminOf = async (userId, teamId) => {
 export const touchTeam = async (teamId) => {
     let connection;
     try {
-        connection = newConnection();
+        connection = await newConnection();
         const query = `UPDATE teamAdmins SET teamId = teamId WHERE teamId = ?`; // Triggers ON UPDATE without actual changes
         await connection.query(query, [teamId]);
     } catch (err) {
@@ -103,3 +104,20 @@ export const touchTeam = async (teamId) => {
     }
 };
 
+export const getTeamId = async (userId, teamName) => {
+    let connection;
+    try {
+        connection = await newConnection();
+        const query = `SELECT teamId FROM teamAdmins WHERE userId = ? AND teamName = ?`; // Triggers ON UPDATE without actual changes
+        const [result] = await connection.query(query, [userId, teamName]);
+        if (result.length === 1) {
+            return result[0].teamId;
+        }
+        return -1
+    } catch (err) {
+        console.error("Database error:", err);
+        throw new Error("Internal database error");
+    } finally {
+        if (connection) await connection.end();
+    }
+};

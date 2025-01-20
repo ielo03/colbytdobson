@@ -10,7 +10,12 @@ const post = async (req, res) => {
 
         const { teamName } = req.body;
 
-        if (!teamName || typeof teamName !== "string" || teamName.length > 20) {
+        if (
+            !teamName ||
+            typeof teamName !== "string" ||
+            teamName.length > 20 ||
+            !/^[a-z0-9_\-'.]+$/.test(teamName)
+        ) {
             console.error("Team name invalid");
             return res.status(400).json({ error: "Team name invalid" });
         }
@@ -30,8 +35,8 @@ const post = async (req, res) => {
             const teamId = teamResult.insertId;
             // Insert into teamAdmins
             await connection.execute(
-                `INSERT INTO teamAdmins (teamId, userId) VALUES (?, ?)`,
-                [teamId, req.user.userId]
+                `INSERT INTO teamAdmins (teamId, userId, teamName) VALUES (?, ?, ?)`,
+                [teamId, req.user.userId, teamName]
             );
             // Commit the transaction
             await connection.commit();

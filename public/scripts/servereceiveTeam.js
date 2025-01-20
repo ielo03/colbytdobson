@@ -1,15 +1,20 @@
-const initialPlayers = { initialPlayers: 0 };
+let teamName = null;
+let players = null;
 
 async function fetchPlayers(teamName) {
     try {
         const response = await fetch(
-            `https://colbytdobson.com/api/get-players?team=${encodeURIComponent(
-                teamName
-            )}`
-        );
+            `/api/servereceive/players?teamName=${teamName}`,{
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
         if (response.ok) {
-            const players = await response.json();
-            displayPlayers(players);
+            players = await response.json();
+            console.log(players);
+            populateTable(players);
+            // displayPlayers(players);
         } else {
             alert("Failed to fetch players. Please check the team name.");
         }
@@ -19,64 +24,64 @@ async function fetchPlayers(teamName) {
     }
 }
 
-function displayPlayers(players) {
-    const playersList = document.getElementById("players");
-    playersList.innerHTML = "";
-    players.forEach((player) => {
-        const li = document.createElement("li");
-
-        const span = document.createElement("span");
-        span.textContent = player.player;
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.classList.add("delete");
-        deleteButton.addEventListener("click", async () => {
-            if (
-                confirm(`Are you sure you want to delete ${player.player}?`) &&
-                (players.length > 1 ||
-                    confirm(
-                        `Deleting the last player will also delete the team. Are you sure you want to continue?`
-                    ))
-            ) {
-                try {
-                    const response = await fetch(
-                        "https://colbytdobson.com/api/delete-player",
-                        {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                team: player.team,
-                                player: player.player,
-                            }),
-                        }
-                    );
-
-                    if (players.length <= 1) {
-                        window.location.href =
-                            "https://colbytdobson.com/servereceive";
-                    }
-
-                    if (response.ok) {
-                        await fetchPlayers(player.team);
-                    } else {
-                        const error = await response.json();
-                        alert(`Failed to delete player: ${error.message}`);
-                    }
-                } catch (err) {
-                    console.error("Error deleting player:", err);
-                    alert("An error occurred while deleting the player.");
-                }
-            }
-        });
-
-        li.appendChild(span);
-        li.appendChild(deleteButton);
-        playersList.appendChild(li);
-    });
-}
+// function displayPlayers(players) {
+//     const playersList = document.getElementById("players");
+//     playersList.innerHTML = "";
+//     players.forEach((player) => {
+//         const li = document.createElement("li");
+//
+//         const span = document.createElement("span");
+//         span.textContent = player.player;
+//
+//         const deleteButton = document.createElement("button");
+//         deleteButton.textContent = "Delete";
+//         deleteButton.classList.add("delete");
+//         deleteButton.addEventListener("click", async () => {
+//             if (
+//                 confirm(`Are you sure you want to delete ${player.player}?`) &&
+//                 (players.length > 1 ||
+//                     confirm(
+//                         `Deleting the last player will also delete the team. Are you sure you want to continue?`
+//                     ))
+//             ) {
+//                 try {
+//                     const response = await fetch(
+//                         "https://colbytdobson.com/api/delete-player",
+//                         {
+//                             method: "DELETE",
+//                             headers: {
+//                                 "Content-Type": "application/json",
+//                             },
+//                             body: JSON.stringify({
+//                                 team: player.team,
+//                                 player: player.player,
+//                             }),
+//                         }
+//                     );
+//
+//                     if (players.length <= 1) {
+//                         window.location.href =
+//                             "https://colbytdobson.com/servereceive";
+//                     }
+//
+//                     if (response.ok) {
+//                         await fetchPlayers(player.team);
+//                     } else {
+//                         const error = await response.json();
+//                         alert(`Failed to delete player: ${error.message}`);
+//                     }
+//                 } catch (err) {
+//                     console.error("Error deleting player:", err);
+//                     alert("An error occurred while deleting the player.");
+//                 }
+//             }
+//         });
+//
+//         li.appendChild(span);
+//         li.appendChild(deleteButton);
+//         playersList.appendChild(li);
+//     });
+// }
 
 async function createSession() {
     const sessionValue = document.getElementById("session").value;
@@ -107,16 +112,43 @@ async function createSession() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const team = document.title//decodeURIComponent(window.location.pathname.split("/")[2]);
-    // if (!team) {
-    //     window.location.href = "https://colbytdobson.com/servereceive";
-    //     return;
-    // }
-    // document.title = `Manage ${team}`;
-    // document.getElementById("manage").innerHTML = `Manage ${team}`;
+const populateTable = (data) => {
+    if (!data) data = players;
+    console.log(`Data: ${JSON.stringify(data)}`);
+    const tableBody = document.getElementById("playersTable").querySelector("tbody");
 
-    displayPlayers(initialPlayers);
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    // Add rows dynamically
+    data.forEach((item) => {
+        const row = document.createElement("tr");
+
+        const rowData = [
+            item.playerName,
+            item.averagePassRating,
+            item.totalPasses,
+            item.averageServeRating,
+            item.totalServes,
+        ];
+
+        rowData.forEach((value) => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        tableBody.appendChild(row);
+    });
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    teamName = document.getElementById('manage').innerText.split(' ')[1];
+    players = await fetchPlayers(teamName);
+    // Function to populate the grid
+    // populateGrid(players);
+
+    // displayPlayers(initialPlayers);
 
     document
         .getElementById("addPlayerForm")
@@ -134,13 +166,13 @@ document.addEventListener("DOMContentLoaded", () => {
                             headers: {
                                 "Content-Type": "application/json",
                             },
-                            body: JSON.stringify({ team, player }),
+                            body: JSON.stringify({ team: teamName, player }),
                         }
                     );
 
                     if (response.ok) {
                         document.getElementById("player").value = "";
-                        await fetchPlayers(team);
+                        await fetchPlayers(teamName);
                     } else {
                         const error = await response.json();
                         alert(`Failed to add player: ${error.message}`);
@@ -150,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert("An error occurred while adding the player.");
                 }
             } else {
-                await fetchPlayers(team);
+                await fetchPlayers(teamName);
             }
         });
 });

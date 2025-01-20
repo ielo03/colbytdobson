@@ -17,7 +17,23 @@
   <button type="submit">Add Player</button>
 </form>
 
+<button onclick="populateTable()">Render</button>
 <div id="playersList">
-  <h2>Players:</h2>
-  <ul id="players"></ul>
+    <h2>Players:</h2>
+    <div class="table-wrapper">
+        <table class="custom-table" id="playersTable">
+            <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Average Pass Rating</th>
+                <th>Total Passes</th>
+                <th>Average Serve Rating</th>
+                <th>Total Serves</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
 </div>

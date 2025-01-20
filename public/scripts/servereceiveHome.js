@@ -30,6 +30,14 @@ const refreshTeams = async () => {
 };
 
 window.addEventListener("load", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get("message");
+    if (message) {
+        alert(message);
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+
     window.addEventListener('loggedIn', () => refreshTeams())
 
     document.getElementById('createTeamForm').addEventListener('submit', async (event) => {
@@ -38,9 +46,14 @@ window.addEventListener("load", async () => {
         const createTeam = document.getElementById('createTeam').value.trim();
         const resultDiv = document.getElementById('createResult');
 
-        if (!createTeam) {
+        if (
+            !createTeam ||
+            typeof createTeam !== "string" ||
+            createTeam.length > 20 ||
+            !/^[a-z0-9_\-'.]+$/.test(createTeam)
+        ) {
             resultDiv.style.display = 'block';
-            resultDiv.textContent = 'Please enter a team.';
+            resultDiv.textContent = 'Invalid team name';
             resultDiv.className = 'error';
             return;
         }

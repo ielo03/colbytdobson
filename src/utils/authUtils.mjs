@@ -1,6 +1,5 @@
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import {Buffer} from "buffer";
 import env from "../../environment.mjs";
 import {newConnection} from "./dbUtils.mjs";
 import { createPublicKey } from "crypto";
