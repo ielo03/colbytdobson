@@ -145,28 +145,24 @@ const populateTable = (data) => {
 document.addEventListener("DOMContentLoaded", async () => {
     teamName = document.getElementById('manage').innerText.split(' ')[1];
     players = await fetchPlayers(teamName);
-    // Function to populate the grid
-    // populateGrid(players);
-
-    // displayPlayers(initialPlayers);
 
     document
         .getElementById("addPlayerForm")
         .addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const player = document.getElementById("player").value;
+            const playerName = document.getElementById("player").value;
 
-            if (player) {
+            if (playerName) {
                 try {
                     const response = await fetch(
-                        "https://colbytdobson.com/api/add-player",
+                        "/api/servereceive/player",
                         {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                             },
-                            body: JSON.stringify({ team: teamName, player }),
+                            body: JSON.stringify({ teamName, playerName }),
                         }
                     );
 

@@ -1,6 +1,7 @@
 import team from "./api/team.mjs";
 import teams from "./api/teams.mjs";
 import players from "./api/players.mjs";
+import player from "./api/player.mjs";
 
 const servereceiveAPIHandler = (req, res) => {
     const route = decodeURIComponent(req.params.path);
@@ -16,6 +17,10 @@ const servereceiveAPIHandler = (req, res) => {
 
         case 'GET/players': {
             return players.get(req, res);
+        }
+
+        case 'POST/player': {
+            return player.post(req, res);
         }
 
         default: {
