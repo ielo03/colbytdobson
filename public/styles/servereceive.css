@@ -72,7 +72,7 @@
 }
 
 .custom-table tbody tr:hover {
-    background-color: #302E31; /* Highlight row on hover */
+    background-color: #AE9F76; /* Highlight row on hover */
 }
 
 @media (max-width: 600px) {
