@@ -63,7 +63,7 @@ window.addEventListener("load", async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${App.accessToken}`
+                    Authorization: `Bearer ${App.accessToken}`
                 },
                 body: JSON.stringify({
                     teamName: createTeam
@@ -76,13 +76,13 @@ window.addEventListener("load", async () => {
                 document.getElementById('createTeam').value = '';
             }
 
-            refreshTeams();
+            await refreshTeams();
         } catch (error) {
             console.error('Error creating team:', error);
             resultDiv.style.display = 'block';
             resultDiv.textContent = 'An error occurred while creating the team. Please try again later.';
             resultDiv.className = 'error';
-            refreshTeams();
+            await refreshTeams();
         }
     });
 });

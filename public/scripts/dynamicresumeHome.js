@@ -1,6 +1,3 @@
-let accessToken = null;
-let decodedToken = null;
-
 // Utility function to check if a specific cookie exists
 function hasCookie(name) {
     return document.cookie
@@ -10,51 +7,8 @@ function hasCookie(name) {
 
 let existingDataDiv;
 let existingData;
-
-// Function to show the dynamic resume page
-async function showPage() {
-    try {
-        // Hide the login container
-        document.getElementById("login-container").style.display = "none";
-
-        document.getElementById("logout-button").style.display =
-            "inline-block";
-
-        document.getElementById(
-            "welcome-name"
-        ).innerText = `Welcome ${decodedToken.name}!`;
-
-        // Show the dynamic resume container
-        document.getElementById("dynamic-resume-container").style.display =
-            "block";
-
-        await fetchResumes();
-
-        const res = await fetch("/api/dynamicresume/personal-data", {
-            method: "GET",
-            headers: {
-                // Use CustomAuthorization because API Gateway forwards headers to S3, and S3 throws an error if a
-                // bearer authorization is included under the standard Authorization header
-                CustomAuthorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        if (res.ok) {
-            existingData = await res.json();
-
-            // Update the resume content
-            displayExistingData(existingData);
-        } else {
-            console.error("Failed to fetch dynamic content:", await res.text());
-            alert("Failed to load content. Please try again.");
-            showLogin();
-        }
-    } catch (error) {
-        console.error("Error loading content:", error);
-        alert("An error occurred. Please try again.");
-        showLogin();
-    }
-}
+let resumeOutputDiv;
+let jobForm;
 
 async function createMainTopic() {
     const text = prompt("Enter new main topic:");
@@ -63,7 +17,7 @@ async function createMainTopic() {
             const response = await fetch("/api/dynamicresume/main-topic", {
                 method: "POST",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`, // Pass the token
+                    Authorization: `Bearer ${App.accessToken}`, // Pass the token
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ text }),
@@ -137,7 +91,7 @@ async function createBulletPoint(mainTopicId) {
                 {
                     method: "POST",
                     headers: {
-                        CustomAuthorization: `Bearer ${accessToken}`, // Pass the token
+                        Authorization: `Bearer ${App.accessToken}`, // Pass the token
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ mainTopicId, text }),
@@ -202,7 +156,7 @@ async function deleteMainTopic(mainTopicId) {
             const response = await fetch("/api/dynamicresume/main-topic", {
                 method: "DELETE",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`, // Pass the token
+                    Authorization: `Bearer ${App.accessToken}`, // Pass the token
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ mainTopicId }),
@@ -233,30 +187,28 @@ async function deleteMainTopic(mainTopicId) {
 function displayExistingData(data) {
     existingDataDiv.innerHTML = ""; // Clear existing data
 
-    for (const [mainTopic, details] of Object.entries(data)) {
+    for (const [mainTopic, bulletPoints] of Object.entries(data)) {
         const mainTopicDiv = document.createElement("div");
         mainTopicDiv.className = "main-topic";
         mainTopicDiv.textContent = mainTopic;
-        mainTopicDiv.setAttribute("data-id", details.mainTopicId); // Store mainTopicId invisibly
 
         // Create "Create New Bullet Point" button
         const createButton = document.createElement("button");
         createButton.textContent = "Create New Bullet Point";
         createButton.className = "create-bullet-point";
-        createButton.onclick = () => createBulletPoint(details.mainTopicId);
+        createButton.onclick = () => createBulletPoint(mainTopic);
 
         // Create "Edit Main Topic" button
         const editButton = document.createElement("button");
         editButton.textContent = "Edit Topic";
         editButton.className = "edit-main-topic";
-        editButton.onclick = () =>
-            editMainTopic(details.mainTopicId, mainTopic);
+        editButton.onclick = () => editMainTopic(mainTopic);
 
         // Create "Delete Main Topic" button
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete Topic";
         deleteButton.className = "delete-main-topic";
-        deleteButton.onclick = () => deleteMainTopic(details.mainTopicId);
+        deleteButton.onclick = () => deleteMainTopic(mainTopic);
 
         const space1 = document.createElement("span");
         space1.innerText = " ";
@@ -272,25 +224,26 @@ function displayExistingData(data) {
         mainTopicDiv.appendChild(space3);
         mainTopicDiv.appendChild(deleteButton);
 
-        details.bulletPoints.forEach((point) => {
+        // Iterate over bullet points
+        bulletPoints.forEach((point, index) => {
             const bulletPointDiv = document.createElement("div");
             bulletPointDiv.className = "bullet-point";
 
             const span = document.createElement("span");
-            span.textContent = point.bulletPoint;
-            span.setAttribute("data-id", point.id); // Store bulletPointId invisibly
+            span.textContent = point;
+            span.setAttribute("data-id", `${mainTopic}-${index}`); // Create a unique ID for each point
 
             const editButton = document.createElement("button");
             editButton.textContent = "Edit";
             editButton.className = "edit";
             editButton.onclick = () =>
-                editBulletPoint(details.mainTopicId, point.id, point.bulletPoint);
+                editBulletPoint(mainTopic, index, point);
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
             deleteButton.className = "delete";
             deleteButton.onclick = () =>
-                deleteBulletPoint(details.mainTopicId, point.id);
+                deleteBulletPoint(mainTopic, index);
 
             bulletPointDiv.appendChild(span);
             bulletPointDiv.appendChild(editButton);
@@ -310,7 +263,7 @@ async function editMainTopic(mainTopicId, currentText) {
             const response = await fetch("/api/dynamicresume/main-topic", {
                 method: "PUT",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`, // Pass the token
+                    Authorization: `Bearer ${App.accessToken}`, // Pass the token
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ mainTopicId, text }),
@@ -345,11 +298,11 @@ async function editBulletPoint(mainTopicId, bulletPointId, oldValue) {
         try {
             // Send a PUT request to update the bullet point
             const response = await fetch(
-                "https://colbytdobson.com/api/dynamicresume/personal-data",
+                "/api/dynamicresume/personal-data",
                 {
                     method: "PUT",
                     headers: {
-                        CustomAuthorization: `Bearer ${accessToken}`, // Pass the token
+                        Authorization: `Bearer ${App.accessToken}`, // Pass the token
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ mainTopicId, bulletPointId, newValue }),
@@ -382,11 +335,11 @@ async function deleteBulletPoint(mainTopicId, bulletPointId) {
     if (confirm("Are you sure you want to delete this bullet point?")) {
         // Send a DELETE request
         const response = await fetch(
-            "https://colbytdobson.com/api/dynamicresume/personal-data",
+            "/api/dynamicresume/personal-data",
             {
                 method: "DELETE",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ mainTopicId, bulletPointId }),
@@ -431,11 +384,11 @@ async function submitPersonalData(text) {
 
         // Make the POST request
         const response = await fetch(
-            "https://colbytdobson.com/api/dynamicresume/personal-data",
+            "/api/dynamicresume/data",
             {
                 method: "POST",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ text: text }),
@@ -492,7 +445,7 @@ async function submitJobListing(jobInputText, resumeTitle) {
             {
                 method: "POST",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ jobInputText, resumeTitle }),
@@ -531,7 +484,7 @@ async function fetchResumes() {
             {
                 method: "GET",
                 headers: {
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                     "Content-Type": "application/json",
                 },
             }
@@ -620,7 +573,7 @@ async function deleteResume(id) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                 },
                 body: JSON.stringify({ id }),
             })
@@ -632,7 +585,7 @@ async function deleteResume(id) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    CustomAuthorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${App.accessToken}`,
                 },
                 body: JSON.stringify({ id }),
             }
@@ -666,10 +619,33 @@ async function deleteResume(id) {
     }
 }
 
+const refreshData = async () => {
+    try {
+        const res = await fetch("/api/dynamicresume/data", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${App.accessToken}`
+            }
+        });
+        if (res.ok) {
+            existingData = await res.json();
+            displayExistingData(existingData);
+        }
+    } catch (err) {
+        console.error("Error calling get API:", err.message || err);
+        alert("An unexpected error occurred while getting the data.");
+    }
+};
+
 // On page load, check authentication and load appropriate view
-window.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("load", async () => {
+    console.log("HERE");
     const form = document.getElementById("submissionForm");
     existingDataDiv = document.getElementById("existingData");
+    resumeOutputDiv = document.getElementById("resumeOutputDiv");
+    jobForm = document.getElementById("jobSubmissionForm");
+
+    window.addEventListener('loggedIn', () => refreshData())
 
     // Parse and display data
     form.addEventListener("submit", async (event) => {
@@ -678,9 +654,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         await submitPersonalData(inputText);
     });
-
-    const jobForm = document.getElementById("jobSubmissionForm");
-    const resumeOutputDiv = document.getElementById("resumeOutputDiv");
 
     jobForm.addEventListener("submit", async (event) => {
         event.preventDefault();

@@ -4,6 +4,10 @@ import players from "./api/players.mjs";
 import player from "./api/player.mjs";
 
 const servereceiveAPIHandler = (req, res) => {
+    if (!req.user?.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const route = decodeURIComponent(req.params.path);
 
     switch (`${req.method.toUpperCase()}/${route}`) {

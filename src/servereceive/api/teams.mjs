@@ -1,12 +1,7 @@
-import {getTeamId, getTeams} from "../../utils/dbUtils.mjs";
+import {getTeams} from "../../utils/dbUtils.mjs";
 
 const get = async (req, res) => {
     try {
-        if (!req.user?.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        console.log(`TEAMS: ${JSON.stringify(await getTeams(req.user?.userId))}`);
         return res.status(200).json(await getTeams(req.user?.userId));
     } catch (error) {
         console.error("Error processing request:", error.message || error.stack);

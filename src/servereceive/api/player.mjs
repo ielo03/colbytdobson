@@ -4,10 +4,6 @@ const post = async (req, res) => {
     try {
         console.log("Received event:", req.body);
 
-        if (!req.user?.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const { teamName, playerName } = req.body;
 
         if (

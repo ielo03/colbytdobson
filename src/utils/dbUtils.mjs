@@ -11,12 +11,49 @@ export const newConnection = () => {
     });
 }
 
-export const getTeams = async (userId) => {
+export async function fetchExistingData(userId) {
     let connection;
     try {
         connection = await newConnection();
 
-        console.log("Connected to the database");
+        const query = `
+                SELECT mt.name AS mainTopic, bp.bulletPoint
+                FROM mainTopics mt
+                LEFT JOIN bulletPoints bp ON mt.id = bp.mainTopicId
+                WHERE mt.userId = ?
+                ORDER BY mt.id, bp.id
+              `;
+        // Fetch main topics and their bullet points for the given userId
+        const [rows] = await connection.execute(query, [userId]);
+
+        // Generate the structured object
+        return rows.reduce((acc, row) => {
+            const {mainTopic, bulletPoint} = row;
+
+            if (!acc[mainTopic]) {
+                acc[mainTopic] = [];
+            }
+
+            if (bulletPoint) {
+                acc[mainTopic].push(bulletPoint);
+            }
+
+            return acc;
+        }, {});
+    } catch (error) {
+        console.error("Error fetching resume data:", error.message || error);
+        throw new Error("Failed to fetch resume data");
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+}
+
+export const getTeams = async (userId) => {
+    let connection;
+    try {
+        connection = await newConnection();
 
         // Insert the user into the `users` table
         const query = `
@@ -40,8 +77,6 @@ export const getPlayers = async (userId, teamId) => {
     let connection;
     try {
         connection = await newConnection();
-
-        console.log("Connected to the database");
 
         // Insert the user into the `users` table
         const query = `
@@ -68,8 +103,6 @@ export const isAdminOf = async (userId, teamId) => {
     let connection;
     try {
         connection = await newConnection();
-
-        console.log("Connected to the database");
 
         const query = `
                 SELECT 1 

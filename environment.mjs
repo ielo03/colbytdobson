@@ -33,10 +33,15 @@ const db = {
     database: process.env.DB_DATABASE
 };
 
+const bedrock = {
+    modelId: process.env.BEDROCK_MODEL_ID
+}
+
 const environment = {
     server,
     auth,
     db,
+    bedrock,
     __dirname,
     getPathTo
 };
