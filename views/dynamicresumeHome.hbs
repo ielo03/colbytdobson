@@ -6,16 +6,15 @@
     <title>Dynamic Resume</title>
   </head>
   <body>
-
-    <!-- Dynamic Resume Page -->
-    <div id="dynamic-resume-container" width="100vw" height="100vh">
+    <div id="dynamic-resume-container">
       <h1>Dynamic Resume</h1>
       <h3 id="welcome-name"></h3>
       <button id="logout-button" style="display: none">Logout</button>
       <br /><br />
       <div id="resume-content">
         <form id="submissionForm">
-          <textarea
+            <label for="inputText"></label>
+            <textarea
             id="inputText"
             placeholder="Input resume information..."
             required></textarea>
@@ -24,11 +23,13 @@
         <hr />
         <br />
         <form id="jobSubmissionForm">
-          <textarea
+            <label for="jobInputText"></label>
+            <textarea
             id="jobInputText"
             placeholder="Input job listing..."
             required></textarea>
-          <input
+            <label for="resumeTitle"></label>
+            <input
             type="text"
             id="resumeTitle"
             placeholder="Enter resume title..."

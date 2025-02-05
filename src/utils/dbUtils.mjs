@@ -11,31 +11,100 @@ export const newConnection = () => {
     });
 }
 
+export const verifyMainTopicOwnership = async (mainTopicId, userId) => {
+    let connection;
+
+    try {
+        connection = await newConnection();
+
+        const query = `
+            SELECT *
+            FROM mainTopics
+            WHERE id = ? AND userId = ?
+            LIMIT 1
+        `;
+
+        const [rows] = await connection.execute(query, [mainTopicId, userId]);
+
+        if (rows.length === 0) {
+            console.error("Ownership verification failed for main topic");
+            return null;
+        }
+
+        return rows[0];
+    } catch (error) {
+        console.error("Error verifying main topic ownership:", error.message || error);
+        throw new Error("Internal database error during main topic ownership verification");
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+};
+
+export const verifyBulletPointOwnership = async (bulletPointId, mainTopicId, userId) => {
+    let connection;
+
+    try {
+        connection = await newConnection();
+
+        const query = `
+            SELECT bp.*
+            FROM bulletPoints bp
+                     INNER JOIN mainTopics mt ON bp.mainTopicId = mt.id
+            WHERE bp.id = ? AND mt.id = ? AND mt.userId = ?
+            LIMIT 1
+        `;
+
+        const [rows] = await connection.execute(query, [bulletPointId, mainTopicId, userId]);
+
+        if (rows.length === 0) {
+            console.error("Ownership verification failed for bullet point");
+            return null;
+        }
+
+        return rows[0];
+    } catch (error) {
+        console.error("Error verifying bullet point ownership:", error.message || error);
+        throw new Error("Internal database error during bullet point ownership verification");
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+};
+
 export async function fetchExistingData(userId) {
     let connection;
     try {
         connection = await newConnection();
 
         const query = `
-                SELECT mt.name AS mainTopic, bp.bulletPoint
-                FROM mainTopics mt
-                LEFT JOIN bulletPoints bp ON mt.id = bp.mainTopicId
-                WHERE mt.userId = ?
-                ORDER BY mt.id, bp.id
-              `;
+            SELECT mt.id AS mainTopicId, mt.name AS mainTopic, bp.id AS bulletPointId, bp.bulletPoint
+            FROM mainTopics mt
+                     LEFT JOIN bulletPoints bp ON mt.id = bp.mainTopicId
+            WHERE mt.userId = ?
+            ORDER BY mt.id, bp.id
+        `;
         // Fetch main topics and their bullet points for the given userId
         const [rows] = await connection.execute(query, [userId]);
 
         // Generate the structured object
         return rows.reduce((acc, row) => {
-            const {mainTopic, bulletPoint} = row;
+            const { mainTopic, mainTopicId, bulletPoint, bulletPointId } = row;
 
             if (!acc[mainTopic]) {
-                acc[mainTopic] = [];
+                acc[mainTopic] = {
+                    mainTopicId,
+                    bulletPoints: [],
+                };
             }
 
             if (bulletPoint) {
-                acc[mainTopic].push(bulletPoint);
+                acc[mainTopic].bulletPoints.push({
+                    id: bulletPointId,
+                    bulletPoint,
+                });
             }
 
             return acc;

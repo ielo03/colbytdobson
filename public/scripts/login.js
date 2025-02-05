@@ -42,8 +42,10 @@ async function refreshAccessToken() {
         if (res.ok) {
             const data = await res.json();
             App.accessToken = data.accessToken;
+
             if (decodeToken()) {
-                console.log("Refreshed.");
+                console.log("Access token refreshed successfully.");
+                scheduleAccessTokenRefresh(); // Schedule the next refresh
                 return true;
             }
             return false;
@@ -57,14 +59,32 @@ async function refreshAccessToken() {
     }
 }
 
-// Function to check and ensure a valid access token
-async function ensureAccessToken() {
-    if (App?.decodedToken?.exp > new Date() || !App?.accessToken) {
-        console.log("No access token found. Attempting to refresh...");
+async function scheduleAccessTokenRefresh() {
+    if (!App?.decodedToken?.exp) {
+        console.error("No expiration time found in the token.");
+        return;
+    }
 
+    const expirationTime = App.decodedToken.exp * 1000; // Convert to milliseconds
+    const currentTime = Date.now();
+    const refreshTime = expirationTime - currentTime - 60000; // Schedule refresh 1 minute before expiry
+
+    if (refreshTime > 0) {
+        setTimeout(refreshAccessToken, refreshTime);
+        console.log(`Scheduled access token refresh in ${Math.floor(refreshTime / 1000)} seconds.`);
+    } else {
+        console.warn("Token is already expired or close to expiring. Refreshing immediately...");
+        await refreshAccessToken();
+    }
+}
+
+// Ensure the token refresh is scheduled when the token is first fetched
+async function ensureAccessToken() {
+    if (!App?.accessToken || App?.decodedToken?.exp * 1000 < Date.now()) {
+        console.log("No valid access token found. Attempting to refresh...");
         const refreshed = await refreshAccessToken();
         if (!refreshed) {
-            console.log("No valid tokens available");
+            console.log("Failed to acquire a valid token.");
             return false;
         }
     }

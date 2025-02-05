@@ -8,10 +8,12 @@ import servereceiveSession from "./servereceive/servereceiveSession.mjs";
 import servereceiveAPIHandler from "./servereceive/servereceiveAPIHandler.mjs";
 import dynamicresumeAPIHandler from "./dynamicresume/dynamicresumeAPIHandler.mjs";
 import servereceiveShortcut from "./servereceive/servereceiveShortcut.mjs";
+import colbytdobsonResume from "./home/colbytdobsonResume.mjs";
 
 const router = express.Router();
 
 router.get("/", colbytdobsonHome.get);
+router.get("/resume", colbytdobsonResume.get);
 router.get("/sr", servereceiveShortcut.get);
 router.get("/sr/*path", servereceiveShortcut.get);
 router.get("/servereceive", servereceiveHome.get);

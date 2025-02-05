@@ -3,24 +3,32 @@
 }
 
 html {
+    display: flex;
+    flex-direction: column;
     font-family: sans-serif;
     color: #DCEFFF;
     background-color: #191919;
 }
 
 body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 0;
     margin: 0;
     background-color: #121212;
 }
 
 .container {
     display: flex;
+    flex: 1;
     flex-direction: column; /* Stack elements vertically */
     min-height: 100vh; /* Ensure container spans the full height of the viewport */
 }
 
 .main {
     flex: 1; /* Take up remaining space to push footer to the bottom */
+    display: flex;
     padding: 20px;
 }
 
@@ -75,14 +83,14 @@ h1, p, h2, h3 {
     object-fit: cover; /* Scale the image correctly */
 }
 
-.plain-text {
+.navbar-title {
     color: #DCEFFF;
     text-decoration: none;
 }
 
-.plain-text:hover {
+.navbar-title:hover {
     text-decoration: none;
-    cursor: default;
+    cursor: pointer;
 }
 
 .center {

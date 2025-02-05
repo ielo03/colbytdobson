@@ -1,7 +1,6 @@
 /* General Container Styles */
 .project-container {
     display: flex;
-    gap: 2%; /* Space between buttons */
     justify-content: center; /* Center buttons within the container */
     align-items: stretch; /* Ensure all buttons have the same height */
     padding: 2%; /* Add padding around the container */
@@ -13,7 +12,7 @@
 }
 
 /* Button Styles */
-.project-button {
+.project-button, .resume-button {
     display: flex; /* Flex layout for button content */
     flex-direction: column; /* Stack content vertically */
     flex-grow: 1; /* Allow buttons to grow equally */
@@ -21,6 +20,7 @@
     max-width: 40%; /* Limit button width */
     min-width: 200px; /* Prevent buttons from shrinking too much */
     padding: 20px; /* Space inside buttons */
+    margin: 10px;
     background-color: #3F6CAD; /* Button background color */
     color: #DCEFFF; /* Text color */
     border: none; /* Remove default border */
@@ -35,12 +35,12 @@
 }
 
 /* Button Hover and Active States */
-.project-button:hover {
+.project-button:hover, .resume-button:hover {
     background-color: #2F5C9A; /* Darken button on hover */
     cursor: pointer;
 }
 
-.project-button:active {
+.project-button:active, .resume-button:active {
     background-color: #1F3C6A; /* Darker color on click */
     transform: scale(0.98); /* Slight scale-down effect on click */
 }
@@ -72,7 +72,7 @@
         flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
     }
 
-    .project-button {
+    .project-button, .resume-button {
         flex-basis: 100%; /* Buttons take full width in a single column */
         max-width: 100%; /* Prevent extra space on sides */
         margin-bottom: 10px; /* Add spacing between rows */

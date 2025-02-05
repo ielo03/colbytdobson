@@ -20,6 +20,13 @@ app.engine(
 
 app.set("views", env.getPathTo("views"));
 
+app.use((req, res, next) => {
+    if (req.headers['cache-control'] === 'no-cache') {
+        res.set('Cache-Control', 'no-store, must-revalidate');
+    }
+    next();
+});
+
 app.use(express.static(env.getPathTo("public")));
 
 app.use(express.urlencoded({extended: true}));
@@ -58,6 +65,13 @@ app.use(async (req, res, next) => {
         console.error("Token validation error:", err);
         next();
     }
+});
+
+app.use((req, res, next) => {
+    res.on('finish', () => {
+        console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${res.statusCode}`);
+    });
+    next();
 });
 
 app.use(routes);
