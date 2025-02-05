@@ -21,7 +21,7 @@ const refreshTeams = async () => {
             teamLink.id = `team${team.id}`;                   // Set the ID as team${id}
             teamLink.href = `/servereceive/${team.teamName}`; // Set the href as required
             teamLink.textContent = team.teamName;            // Set the link text to the team name
-            teamLink.className = 'team-link';
+            teamLink.className = 'purple-button';
 
             teamsDiv.appendChild(teamLink);
             teamsDiv.appendChild(document.createElement('br'));
