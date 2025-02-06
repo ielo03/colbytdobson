@@ -27,7 +27,7 @@ h4 {
 /* Styling for the labels */
 label {
   font-size: 1em;
-  color: #ABABAB;
+  color: #C8C8C8;
   margin-bottom: 5px;
   display: inline-block;
 }
@@ -42,7 +42,7 @@ textarea {
   font-size: 1em;
   resize: vertical;
   background-color: #555;
-  color: #ABABAB;
+  color: #dbdbdb;
 }
 
 /* Styling for the select dropdown */
@@ -53,7 +53,7 @@ select {
   border-radius: 4px;
   font-size: 1em;
   background-color: #555;
-  color: #ABABAB;
+  color: #dbdbdb;
 }
 
 /* Styling for the button */
@@ -61,7 +61,7 @@ input[type="button"] {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
-  color: #ABABAB;
+  color: #dbdbdb;
   border: none;
   border-radius: 4px;
   font-size: 1em;
@@ -91,5 +91,5 @@ a:hover {
   border: 1px solid #191919;
   border-radius: 4px;
   font-size: 1em;
-  color: #ABABAB;
+  color: #dbdbdb;
 }
