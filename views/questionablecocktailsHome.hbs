@@ -1,0 +1,54 @@
+<div>
+    <a href="/questionablecocktails/about">About</a><br />
+    <h1 class="qcHeader">Questionable Cocktails</h1>
+</div>
+<div>
+    <label for="ingredients">Enter your (comma separated) ingredients:</label
+    ><br />
+    <textarea id="ingredients" name="ingredients"></textarea><br />
+</div>
+<div>
+    <label for="drink">Select drink type: </label>
+    <select id="drink" name="drink">
+        <option value="none">Unspecified</option>
+        <option value="aperol-spritz">Aperol Spritz</option>
+        <option value="bellini">Bellini</option>
+        <option value="black-russian">Black Russian</option>
+        <option value="bloody-mary">Bloody Mary</option>
+        <option value="caipirinha">Caipirinha</option>
+        <option value="cuba-libre">Cuba Libre</option>
+        <option value="cosmopolitan">Cosmopolitan</option>
+        <option value="daiquiri">Daiquiri</option>
+        <option value="dark-n-stormy">Dark 'n' Stormy</option>
+        <option value="espresso-martini">Espresso Martini</option>
+        <option value="french-75">French 75</option>
+        <option value="gin-and-tonic">Gin and Tonic</option>
+        <option value="hemingway-daiquiri">Hemingway Daiquiri</option>
+        <option value="irish-coffee">Irish Coffee</option>
+        <option value="long-island-iced-tea">Long Island Iced Tea</option>
+        <option value="mai-tai">Mai Tai</option>
+        <option value="manhattan">Manhattan</option>
+        <option value="margarita">Margarita</option>
+        <option value="martini">Martini</option>
+        <option value="mint-julep">Mint Julep</option>
+        <option value="mojito">Mojito</option>
+        <option value="moscow-mule">Moscow Mule</option>
+        <option value="negroni">Negroni</option>
+        <option value="old-fashioned">Old Fashioned</option>
+        <option value="paloma">Paloma</option>
+        <option value="pina-colada">Piña Colada</option>
+        <option value="pisco-sour">Pisco Sour</option>
+        <option value="rum-punch">Rum Punch</option>
+        <option value="sazerac">Sazerac</option>
+        <option value="sidecar">Sidecar</option>
+        <option value="tequila-sunrise">Tequila Sunrise</option>
+        <option value="tom-collins">Tom Collins</option>
+        <option value="vesper-martini">Vesper Martini</option>
+        <option value="whiskey-sour">Whiskey Sour</option>
+        <option value="white-russian">White Russian</option>
+    </select>
+</div>
+<div>
+    <input type="button" id="submit" name="submit" value="Concoct" />
+</div>
+<div id="recipe"></div>

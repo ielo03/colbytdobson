@@ -30,6 +30,7 @@ body {
     flex: 1; /* Take up remaining space to push footer to the bottom */
     display: flex;
     padding: 20px;
+    flex-direction: column;
 }
 
 .footer {
@@ -129,4 +130,14 @@ h1, p, h2, h3 {
     background-color: #6D64D8; /* Darker color on click */
     transform: scale(0.98);
     text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .table-wrapper {
+        overflow-x: scroll; /* Enable scrolling on smaller screens */
+    }
+
+    .custom-table {
+        min-width: 600px; /* Prevent table from shrinking below 5-column width */
+    }
 }

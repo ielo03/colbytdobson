@@ -1,6 +1,6 @@
 # colbytdobson
 
-This is the beginning of my portfolio website, which I soon hope to deploy.<br>
+This is the beginning of my portfolio website<br>
 <br>
 The goal here is to create a pleasing enjoyable experience for anyone<br>
 looking to learn more about me.<br>

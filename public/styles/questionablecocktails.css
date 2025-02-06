@@ -1,0 +1,91 @@
+/*!* Basic styles to ensure the background color remains white *!*/
+/*body {*/
+/*  background-color: white;*/
+/*  font-family: Arial, sans-serif;*/
+/*  color: #333;*/
+/*  margin: 20px;*/
+/*  padding: 0;*/
+/*}*/
+
+/* Styling for the main container */
+.base-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  /*background-color: white;*/
+  /*border: 1px solid #ccc;*/
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the header */
+.qcHeader {
+  font-size: 2em;
+  /*color: #444;*/
+  text-align: center;
+}
+
+/* Styling for the labels */
+label {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+/* Styling for the textarea */
+textarea {
+  width: calc(100% - 22px);
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  resize: vertical;
+}
+
+/* Styling for the select dropdown */
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+/* Styling for the button */
+input[type="button"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+input[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for links */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Styling for the recipe output */
+#recipe {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  font-size: 1em;
+}
