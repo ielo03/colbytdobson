@@ -223,3 +223,7 @@ export const getTeamId = async (userId, teamName) => {
         if (connection) await connection.end();
     }
 };
+
+export const getSessionId = async (teamId, sessionName) => {
+    return -1;
+};

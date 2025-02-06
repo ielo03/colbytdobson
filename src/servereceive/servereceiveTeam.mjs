@@ -6,16 +6,16 @@ const get = async (req, res) => {
     const teamId = await getTeamId(req.user.userId, teamName)
 
     if (teamId === -1) {
-        res.redirect(`/servereceive?message=Team ${teamName} not found.`);
-    } else {
-        res.render("servereceiveTeam", {
-            script: "/scripts/servereceiveTeam.js",
-            style: "/styles/servereceive.css",
-            title: `Manage ${teamName}`,
-            loginRequired: "true",
-            teamId: teamId
-        });
+        return res.redirect(`/servereceive?message=Team ${teamName} not found.`);
     }
+
+    return res.render("servereceiveTeam", {
+        script: "/scripts/servereceiveTeam.js",
+        style: "/styles/servereceive.css",
+        title: `Manage ${teamName}`,
+        loginRequired: "true",
+        teamId: teamId
+    });
 };
 
 export default {
