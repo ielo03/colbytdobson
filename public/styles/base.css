@@ -56,9 +56,13 @@ a:hover {
     cursor: pointer;
 }
 
-h1, p, h2, h3 {
+h1, p, h2, h3, h4, h5, h6 {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margin */
+}
+
+ul, li, ol {
+    margin: 0;
 }
 
 .nav-bar {

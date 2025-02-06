@@ -32,6 +32,7 @@
   "homepage": "https://github.com/ielo03/web-dev-final#readme",
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.734.0",
+    "@google/generative-ai": "^0.21.0",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",

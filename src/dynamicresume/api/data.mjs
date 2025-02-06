@@ -4,6 +4,7 @@ import {
     InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
 import JSON5 from "json5";
+import env from "../../../environment.mjs";
 
 const bedrockClient = new BedrockRuntimeClient({ region: "us-west-2" });
 
@@ -49,7 +50,7 @@ async function post(req, res) {
 
         // Construct Bedrock parameters
         const bedrockParams = {
-            modelId: env.bedrock.modelId,
+            modelId: env.genai.bedrockModelId,
             contentType: "application/json",
             accept: "application/json",
             body: JSON.stringify(body),
@@ -63,7 +64,7 @@ async function post(req, res) {
         }
 
         const parsedBody = parseBody(response);
-        const insertedData = await processBody(parsedBody, decodedToken.userId);
+        const insertedData = await processBody(parsedBody, req.user.userId);
 
         return res.status(200).json(insertedData);
     } catch (error) {

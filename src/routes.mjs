@@ -11,6 +11,7 @@ import shortcuts from "./shortcuts.mjs";
 import colbytdobsonResume from "./home/colbytdobsonResume.mjs";
 import questionablecocktailsAbout from "./questionablecocktails/questionablecocktailsAbout.mjs";
 import questionablecocktailsHome from "./questionablecocktails/questionablecocktailsHome.mjs";
+import questionablecocktailsAPIHandler from "./questionablecocktails/questionablecocktailsAPIHandler.mjs";
 
 const router = express.Router();
 
@@ -31,5 +32,6 @@ router.get("/questionablecocktails/about", questionablecocktailsAbout.get);
 router.all("/api/auth/*path", authAPIHandler);
 router.all("/api/servereceive/*path", servereceiveAPIHandler);
 router.all("/api/dynamicresume/*path", dynamicresumeAPIHandler);
+router.all("/api/questionablecocktails/*path", questionablecocktailsAPIHandler);
 
 export default router;

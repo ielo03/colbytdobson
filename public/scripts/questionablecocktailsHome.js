@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
       drink: drink,
     };
 
-    fetch("http://localhost:8080", {
+    fetch("/api/questionablecocktails/concoct", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

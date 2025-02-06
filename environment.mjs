@@ -33,15 +33,16 @@ const db = {
     database: process.env.DB_DATABASE
 };
 
-const bedrock = {
-    modelId: process.env.BEDROCK_MODEL_ID
+const genai = {
+    bedrockModelId: process.env.BEDROCK_MODEL_ID,
+    geminiAPIKey: process.env.GEMINI_API_KEY
 }
 
 const environment = {
     server,
     auth,
     db,
-    bedrock,
+    genai,
     __dirname,
     getPathTo
 };
