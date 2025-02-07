@@ -5,14 +5,12 @@ import env from "../../../environment.mjs";
 const genAI = new GoogleGenerativeAI(env.genai.geminiAPIKey);
 
 // Define the model
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", temperature: 0.9, top_p: 0.85 });
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite-preview-02-05", temperature: 0.9, top_p: 0.85 });
 
 const post = async (req, res) => {
     const data = req.body;
     const ingredients = data.ingredients || '';
     const drink = data.drink || '';
-
-    console.log(`Ingredients: ${ingredients}, Drink: ${drink}`);
 
     const cocktails = await generateCocktails(ingredients, drink);
 
@@ -79,7 +77,7 @@ to create a drink with the given ingredients or the drink will be disgusting, yo
     and you cannot use ingredients that weren't listed.
 ${drinkType !== 'none' ? " Make it as similar as possible to or a variation of " + drinkType + "." : ""}
 
-Format your response to be HTML-friendly with the following structure:
+Format your response to be HTML-friendly, NOT the full html document, with the following structure:
 
     1. Wrap the cocktail name in an <h3> tag.
     2. Provide a brief description of the cocktail in a <p> tag.${drinkType !== 'none' ? " Include how it will taste compared to a " + drinkType + "." : ""}
@@ -98,7 +96,7 @@ ${drinkType !== 'none'
             " using common ingredients. Assume that all necessary ingredients are available."
             : randomPrompt}
 
-Format your response to be HTML-friendly with the following structure:
+Format your response to be HTML-friendly, NOT the full html document, with the following structure:
 
     1. Wrap the cocktail name in an <h3> tag.
     2. Provide a brief description of the cocktail in a <p> tag.
@@ -108,8 +106,6 @@ Format your response to be HTML-friendly with the following structure:
 `;
     }
 
-    console.log(prompt);
-
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -117,7 +113,7 @@ Format your response to be HTML-friendly with the following structure:
         if (text.startsWith('```html\n')) {
             text = text.substring(8);
         }
-        if (text.endsWith('\n```\n')) {
+        if (text.endsWith('\n```') || text.endsWith('\n```\n')) {
             text = text.substring(0, text.length - 5);
         }
         return text;

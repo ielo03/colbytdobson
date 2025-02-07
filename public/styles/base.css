@@ -76,6 +76,10 @@ ul, li, ol {
     background-color: #191919; /* Background color of the navbar */
 }
 
+.g_id_signin > div > div:first-child{
+    display: none;
+}
+
 .logo {
     display: flex; /* Use flexbox for logo text and image */
     align-items: center; /* Vertically center text and image */
