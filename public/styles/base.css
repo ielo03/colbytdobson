@@ -83,6 +83,13 @@ ul, li, ol {
 .google-login-button-container {
     height: 44px;
     width: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+#logout-div {
+    margin-right: 10px;
 }
 
 .logo {
