@@ -80,6 +80,11 @@ ul, li, ol {
     display: none;
 }
 
+.google-login-button-container {
+    height: 44px;
+    width: auto;
+}
+
 .logo {
     display: flex; /* Use flexbox for logo text and image */
     align-items: center; /* Vertically center text and image */
