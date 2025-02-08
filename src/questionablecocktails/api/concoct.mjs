@@ -83,8 +83,9 @@ Format your response to be HTML-friendly, NOT the full html document, with the f
     2. Provide a brief description of the cocktail in a <p> tag.${drinkType !== 'none' ? " Include how it will taste compared to a " + drinkType + "." : ""}
     3. List the ingredients using an unordered list (<ul>), with each ingredient in a <li> tag.
     4. Use a <strong> tag for the "Ingredients" and "Instructions" headings.
-    5. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
-    6. Only use the provided ingredients.
+    5. Anything requiring extra emphasis should be in a <strong> tag, NOT **
+    6. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
+    7. Only use the provided ingredients.
 `;
     } else {
         const randomPrompt = cocktailPrompts[Math.floor(Math.random() * cocktailPrompts.length)];
@@ -101,8 +102,8 @@ Format your response to be HTML-friendly, NOT the full html document, with the f
     1. Wrap the cocktail name in an <h3> tag.
     2. Provide a brief description of the cocktail in a <p> tag.
     3. List the ingredients using an unordered list (<ul>), with each ingredient in a <li> tag.
-    4. Use a <strong> tag for the "Ingredients" and "Instructions" headings.
-    5. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
+    5. Anything requiring extra emphasis should be in a <strong> tag, NOT **
+    6. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
 `;
     }
 
