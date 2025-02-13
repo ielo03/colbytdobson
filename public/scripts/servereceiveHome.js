@@ -46,15 +46,38 @@ window.addEventListener("load", async () => {
         const createTeam = document.getElementById('createTeam').value.trim();
         const resultDiv = document.getElementById('createResult');
 
-        if (
-            !createTeam ||
-            typeof createTeam !== "string" ||
-            createTeam.length > 20 ||
-            !/^[a-z0-9_\-'.]+$/.test(createTeam)
-        ) {
-            resultDiv.style.display = 'block';
-            resultDiv.textContent = 'Invalid team name';
-            resultDiv.className = 'error';
+        if (!createTeam) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = "Team name cannot be empty";
+            resultDiv.className = "error";
+            return;
+        }
+
+        if (typeof createTeam !== "string") {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = "Team name must be a string";
+            resultDiv.className = "error";
+            return;
+        }
+
+        if (createTeam.length > 20) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = "Team name must not exceed 20 characters";
+            resultDiv.className = "error";
+            return;
+        }
+
+        if (/[A-Z]/.test(createTeam)) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = "Team name must only contain lowercase letters";
+            resultDiv.className = "error";
+            return;
+        }
+
+        if (!/^[a-z0-9_\-'.]+$/.test(createTeam)) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = "Team name contains invalid characters. Only lowercase letters, numbers, underscores, hyphens, apostrophes, and periods are allowed";
+            resultDiv.className = "error";
             return;
         }
 
