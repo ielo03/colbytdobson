@@ -7,6 +7,10 @@
     color: red;
 }
 
+#createResult {
+    padding-top: 5px;
+}
+
 .custom-table {
     width: 100%; /* Table spans full width */
     border-collapse: collapse; /* Remove gaps between cells */
