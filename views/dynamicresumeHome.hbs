@@ -1,58 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Resume</title>
-  </head>
-  <body>
-    <div id="dynamic-resume-container">
-      <h1>Dynamic Resume</h1>
-      <h3 id="welcome-name"></h3>
-      <button id="logout-button" style="display: none">Logout</button>
-      <br /><br />
-      <div id="resume-content">
-        <form id="submissionForm">
-            <label for="inputText"></label>
-            <textarea
-            id="inputText"
-            placeholder="Input resume information..."
-            required></textarea>
-          <button type="submit" id="submitButton">Submit</button>
-        </form>
-        <hr />
-        <br />
-        <form id="jobSubmissionForm">
-            <label for="jobInputText"></label>
-            <textarea
-            id="jobInputText"
-            placeholder="Input job listing..."
-            required></textarea>
-            <label for="resumeTitle"></label>
-            <input
-            type="text"
-            id="resumeTitle"
-            placeholder="Enter resume title..."
-            required />
-          <br />
-          <button type="submit" id="jobSubmitButton">Submit</button>
-        </form>
-        <hr />
-        <div id="resumeOutputDiv">
-          <p>
-            Submit resume information and a job listing to view a custom
-            generated resume here!
-          </p>
-        </div>
-        <hr />
-        <br />
-        <button id="createMainTopic" onclick="createMainTopic()">
-          Create Topic
-        </button>
-        <div class="existing-data" id="existingData">
-          <!-- Existing data will appear here -->
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+<div id="dynamic-resume-container">
+<h1 class="centered">Dynamic Resume Generator</h1>
+<button id="logout-button" style="display: none">Logout</button>
+<br /><br />
+<div id="resume-content">
+<form id="submissionForm">
+    <label for="inputText"></label>
+    <textarea
+    id="inputText"
+    placeholder="Input resume information..."
+    required></textarea>
+  <button type="submit" id="submitButton">Submit</button>
+</form>
+<hr />
+<br />
+<form id="jobSubmissionForm">
+    <label for="jobInputText"></label>
+    <textarea
+    id="jobInputText"
+    placeholder="Input job listing..."
+    required></textarea>
+    <label for="resumeTitle"></label>
+    <input
+    type="text"
+    id="resumeTitle"
+    placeholder="Enter resume title..."
+    required />
+  <br />
+  <button type="submit" id="jobSubmitButton">Submit</button>
+</form>
+<hr />
+<div id="resumeOutputDiv">
+  <p>
+    Submit resume information and a job listing to view a custom
+    generated resume here!
+  </p>
+</div>
+<hr />
+<br />
+<button id="createMainTopic" onclick="createMainTopic()">
+  Create Topic
+</button>
+<div class="existing-data" id="existingData">
+  <!-- Existing data will appear here -->
+</div>
+</div>
+</div>

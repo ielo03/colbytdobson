@@ -152,6 +152,10 @@ ul, li, ol {
     text-decoration: none;
 }
 
+.centered {
+    text-align: center;
+}
+
 @media (max-width: 600px) {
     .table-wrapper {
         overflow-x: scroll; /* Enable scrolling on smaller screens */
