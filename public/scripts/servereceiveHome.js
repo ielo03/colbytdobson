@@ -33,13 +33,6 @@ const validateTeamName = () => {
     const createTeam = document.getElementById('createTeam').value.trim();
     const resultDiv = document.getElementById('createResult');
 
-    if (!createTeam) {
-        resultDiv.style.display = "block";
-        resultDiv.textContent = "Team name cannot be empty";
-        resultDiv.className = "error";
-        return;
-    }
-
     if (typeof createTeam !== "string") {
         resultDiv.style.display = "block";
         resultDiv.textContent = "Team name must be a string";
