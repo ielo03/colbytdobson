@@ -30,7 +30,7 @@ const refreshTeams = async () => {
 };
 
 const validateTeamName = () => {
-    const createTeam = document.getElementById('createTeam').value.trim();
+    const createTeam = document.getElementById('createTeam').value;
     const resultDiv = document.getElementById('createResult');
 
     if (typeof createTeam !== "string") {
@@ -43,6 +43,13 @@ const validateTeamName = () => {
     if (createTeam.length > 20) {
         resultDiv.style.display = "block";
         resultDiv.textContent = "Team name must not exceed 20 characters";
+        resultDiv.className = "error";
+        return;
+    }
+
+    if (/\s/.test(createTeam)) {
+        resultDiv.style.display = "block";
+        resultDiv.textContent = "Team name cannot contain spaces";
         resultDiv.className = "error";
         return;
     }
