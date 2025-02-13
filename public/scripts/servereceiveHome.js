@@ -93,6 +93,13 @@ window.addEventListener("load", async () => {
                 }),
             });
 
+            if (response.status === 409) {
+                resultDiv.style.display = "block";
+                resultDiv.textContent = "Team name already exists";
+                resultDiv.className = "error";
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error(`Server returned ${response.status}`);
             } else {

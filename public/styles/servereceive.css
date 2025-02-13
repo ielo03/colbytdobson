@@ -3,6 +3,10 @@
     overflow-x: auto; /* Enable horizontal scrolling if content overflows */
 }
 
+.error {
+    color: red;
+}
+
 .custom-table {
     width: 100%; /* Table spans full width */
     border-collapse: collapse; /* Remove gaps between cells */
