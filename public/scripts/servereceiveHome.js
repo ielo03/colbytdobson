@@ -54,7 +54,7 @@ const validateTeamName = () => {
         return;
     }
 
-    if (!/^[a-z0-9_\-'.]+$/.test(createTeam)) {
+    if (!/^[a-z0-9_\-'.]*$/.test(createTeam)) {
         resultDiv.style.display = "block";
         resultDiv.textContent = "Team name contains invalid characters. Only lowercase letters, numbers, underscores, hyphens, apostrophes, and periods are allowed";
         resultDiv.className = "error";
