@@ -169,7 +169,7 @@ function showLogout() {
     console.log('Showing logout...');
     window.dispatchEvent(new Event('loggedIn'));
     document.getElementById("login-div").style.display = 'none';
-    document.getElementById("logout-div").style.display = 'block';
+    document.getElementById("logout-div").style.display = 'flex';
 }
 
 window.addEventListener("load", async () => {
