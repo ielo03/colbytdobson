@@ -77,7 +77,7 @@ async function post(req, res) {
         }
 
         // Generate tokens
-        const { accessToken, refreshToken } = generateTokens(userId, name, email);
+        const { accessToken, refreshToken } = generateTokens(userId, name, email, picture);
 
         const REFRESH_TOKEN_EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
         const refreshTokenExpiry = Date.now() + REFRESH_TOKEN_EXPIRY_MS;
