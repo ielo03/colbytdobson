@@ -9,11 +9,7 @@ const parseCookies = () => {
 }
 
 window.addEventListener('loggedIn', () => {
-    let link = App.decodedToken.picture;
-    if (!link) {
-        link = decodeToken().picture;
-    }
-    document.getElementById('profile').setAttribute('src', link);
+    document.getElementById('profile').setAttribute('src', App.decodedToken.picture);
 });
 
 window.App = window.App || {};

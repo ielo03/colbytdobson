@@ -20,7 +20,6 @@ function decodeToken() {
         const payload = atob(parts[1]); // Decode Base64
         const decodedToken = JSON.parse(payload); // Parse JSON payload
         App.decodedToken = decodedToken;
-        console.log("TOKEN: " + JSON.stringify(App.decodedToken));
         return decodedToken;
     } catch (error) {
         console.error("Failed to decode token:", error);
