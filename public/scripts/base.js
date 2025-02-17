@@ -8,9 +8,9 @@ const parseCookies = () => {
     return cookieObj;
 }
 
+window.addEventListener('loggedIn', () => {
+    document.getElementById('profile').setAttribute('src', App.decodedToken.picture);
+});
+
 window.App = window.App || {};
 App.cookies = parseCookies();
-
-window.onload = () => {
-    document.body.focus();
-};
