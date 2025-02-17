@@ -18,9 +18,10 @@ function decodeToken() {
 
         // Decode the payload (middle part of the token)
         const payload = atob(parts[1]); // Decode Base64
-        App.decodedToken = JSON.parse(payload); // Parse JSON payload
+        const decodedToken = JSON.parse(payload); // Parse JSON payload
+        App.decodedToken = decodedToken;
         // console.log(App.decodedToken);
-        return App.decodedToken;
+        return decodedToken;
     } catch (error) {
         console.error("Failed to decode token:", error);
         return null;
@@ -167,6 +168,7 @@ function showLogin() {
 
 function showLogout() {
     console.log('Showing logout...');
+    App.decodedToken = decodeToken();
     window.dispatchEvent(new Event('loggedIn'));
     document.getElementById("login-div").style.display = 'none';
     document.getElementById("logout-div").style.display = 'flex';
