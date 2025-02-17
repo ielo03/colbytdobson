@@ -85,7 +85,8 @@ Format your response to be HTML-friendly, NOT the full html document, with the f
     4. Use a <strong> tag for the "Ingredients" and "Instructions" headings.
     5. Anything requiring extra emphasis should be in a <strong> tag, NOT **
     6. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
-    7. Only use the provided ingredients.
+    7. Make sure you label the ingredients section and the instructions section in <h4> tags.
+    8. Only use the provided ingredients.
 `;
     } else {
         const randomPrompt = cocktailPrompts[Math.floor(Math.random() * cocktailPrompts.length)];
@@ -104,6 +105,7 @@ Format your response to be HTML-friendly, NOT the full html document, with the f
     3. List the ingredients using an unordered list (<ul>), with each ingredient in a <li> tag.
     5. Anything requiring extra emphasis should be in a <strong> tag, NOT **
     6. Provide the instructions as an ordered list (<ol>), with each step in a <li> tag.
+    7. Make sure you label the ingredients section and the instructions section in <h4> tags.
 `;
     }
 
