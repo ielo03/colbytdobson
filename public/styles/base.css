@@ -152,6 +152,17 @@ ul, li, ol {
     text-decoration: none;
 }
 
+#logout-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#profile {
+    flex: 1;
+}
+
 .centered {
     text-align: center;
 }
