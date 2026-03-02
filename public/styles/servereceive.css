@@ -244,6 +244,10 @@
     z-index: 100;
 }
 
+.overlay-backdrop[hidden] {
+    display: none !important;
+}
+
 .overlay-card {
     background: #262422;
     border: 1px solid #4F4B47;
