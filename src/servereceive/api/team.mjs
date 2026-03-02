@@ -22,12 +22,13 @@ const post = async (req, res) => {
             // Start a transaction
             await connection.beginTransaction();
 
-            // Check if the team name already exists
+            // Check if this user already has a team with that name
             const [existingTeam] = await connection.execute(
                 `SELECT teamName
                  FROM teams
-                 WHERE teamName = ?`,
-                [teamName]
+                 WHERE teamName = ?
+                   AND userId = ?`,
+                [teamName, req.user.userId]
             );
             if (existingTeam.length > 0) {
                 console.error("Team name already exists");

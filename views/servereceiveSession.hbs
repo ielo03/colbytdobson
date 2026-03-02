@@ -14,13 +14,16 @@
 
     <section class="panel-card">
         <div class="section-header">
-            <h2>Visible Players</h2>
-            <div class="action-row-buttons">
-                <button type="button" id="showAllPlayersButton" class="secondary-button">Show All</button>
-                <button type="button" id="hideAllPlayersButton" class="secondary-button">Hide All</button>
-            </div>
+            <h2>Player Filters</h2>
         </div>
-        <div id="playerFilterOptions" class="checkbox-grid"></div>
+        <div class="action-row-buttons filter-button-row">
+            <button type="button" id="editServerFilterButton" class="secondary-button">Edit Servers</button>
+            <button type="button" id="editPasserFilterButton" class="secondary-button">Edit Receivers</button>
+        </div>
+        <div class="filter-summary-grid">
+            <div class="derived-rating" id="serverFilterSummary">Servers shown: -</div>
+            <div class="derived-rating" id="passerFilterSummary">Receivers shown: -</div>
+        </div>
     </section>
 
     <section class="panel-card">
@@ -72,4 +75,18 @@
             </table>
         </div>
     </section>
+</div>
+
+<div id="playerFilterOverlay" class="overlay-backdrop" hidden>
+    <div class="overlay-card">
+        <div class="section-header">
+            <h2 id="playerFilterOverlayTitle">Edit Players</h2>
+            <button type="button" id="closePlayerFilterOverlay" class="secondary-button">Close</button>
+        </div>
+        <div class="action-row-buttons filter-button-row">
+            <button type="button" id="overlayShowAllPlayersButton" class="secondary-button">Show All</button>
+            <button type="button" id="overlayHideAllPlayersButton" class="secondary-button">Hide All</button>
+        </div>
+        <div id="playerFilterOverlayOptions" class="checkbox-grid"></div>
+    </div>
 </div>

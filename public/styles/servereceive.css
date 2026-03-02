@@ -218,12 +218,41 @@
     padding: 0.75rem 1rem;
 }
 
+.filter-button-row,
+.filter-summary-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
 .derived-rating {
     background: #191919;
     border: 1px solid #4F4B47;
     border-radius: 10px;
     color: #DCEFFF;
     padding: 0.9rem 1rem;
+}
+
+.overlay-backdrop {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    padding: 1rem;
+    position: fixed;
+    z-index: 100;
+}
+
+.overlay-card {
+    background: #262422;
+    border: 1px solid #4F4B47;
+    border-radius: 16px;
+    max-height: 80vh;
+    max-width: 48rem;
+    overflow-y: auto;
+    padding: 1.25rem;
+    width: min(100%, 48rem);
 }
 
 .stat-card {

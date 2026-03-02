@@ -2,7 +2,9 @@ let sessionPageState = {
     teamName: null,
     sessionName: null,
     players: [],
-    visiblePlayerIds: [],
+    visibleServerIds: [],
+    visiblePasserIds: [],
+    activeFilterMode: null,
     selectedServerId: null,
     selectedPasserId: null,
     selectedPassRating: null,
@@ -79,18 +81,68 @@ const renderSelectableButtons = (containerId, items, selectedId, onSelect) => {
     });
 };
 
-const visiblePlayers = () => {
-    if (!sessionPageState.visiblePlayerIds.length) {
+const visiblePlayers = (mode) => {
+    const ids = mode === "server"
+        ? sessionPageState.visibleServerIds
+        : sessionPageState.visiblePasserIds;
+    if (!ids.length) {
         return [];
     }
 
-    const visibleIds = new Set(sessionPageState.visiblePlayerIds);
+    const visibleIds = new Set(ids);
     return sessionPageState.players.filter((player) => visibleIds.has(player.playerId));
 };
 
-const renderPlayerFilters = () => {
-    const container = document.getElementById("playerFilterOptions");
+const summarizeFilter = (ids) => {
+    if (ids.length === 0) {
+        return "none";
+    }
+
+    if (ids.length === sessionPageState.players.length) {
+        return "all";
+    }
+
+    return `${ids.length}`;
+};
+
+const renderFilterSummaries = () => {
+    document.getElementById("serverFilterSummary").textContent = `Servers shown: ${summarizeFilter(sessionPageState.visibleServerIds)}`;
+    document.getElementById("passerFilterSummary").textContent = `Receivers shown: ${summarizeFilter(sessionPageState.visiblePasserIds)}`;
+};
+
+const getFilterIds = (mode) => mode === "server"
+    ? sessionPageState.visibleServerIds
+    : sessionPageState.visiblePasserIds;
+
+const setFilterIds = (mode, ids) => {
+    if (mode === "server") {
+        sessionPageState.visibleServerIds = ids;
+        if (!ids.includes(sessionPageState.selectedServerId)) {
+            sessionPageState.selectedServerId = null;
+        }
+    } else {
+        sessionPageState.visiblePasserIds = ids;
+        if (!ids.includes(sessionPageState.selectedPasserId)) {
+            sessionPageState.selectedPasserId = null;
+        }
+    }
+};
+
+const renderPlayerFilterOverlay = () => {
+    const overlay = document.getElementById("playerFilterOverlay");
+    const container = document.getElementById("playerFilterOverlayOptions");
+    const title = document.getElementById("playerFilterOverlayTitle");
+    const mode = sessionPageState.activeFilterMode;
+
+    if (!mode) {
+        overlay.hidden = true;
+        return;
+    }
+
+    overlay.hidden = false;
+    title.textContent = mode === "server" ? "Edit Servers" : "Edit Receivers";
     container.innerHTML = "";
+    const currentIds = getFilterIds(mode);
 
     sessionPageState.players.forEach((player) => {
         const label = document.createElement("label");
@@ -98,23 +150,26 @@ const renderPlayerFilters = () => {
 
         const input = document.createElement("input");
         input.type = "checkbox";
-        input.checked = sessionPageState.visiblePlayerIds.includes(player.playerId);
+        input.checked = currentIds.includes(player.playerId);
         input.addEventListener("change", () => {
+            const nextIds = [...getFilterIds(mode)];
             if (input.checked) {
-                if (!sessionPageState.visiblePlayerIds.includes(player.playerId)) {
-                    sessionPageState.visiblePlayerIds.push(player.playerId);
+                if (!nextIds.includes(player.playerId)) {
+                    nextIds.push(player.playerId);
                 }
             } else {
-                sessionPageState.visiblePlayerIds = sessionPageState.visiblePlayerIds.filter((id) => id !== player.playerId);
-                if (!sessionPageState.visiblePlayerIds.includes(sessionPageState.selectedServerId)) {
-                    sessionPageState.selectedServerId = null;
-                }
-                if (!sessionPageState.visiblePlayerIds.includes(sessionPageState.selectedPasserId)) {
-                    sessionPageState.selectedPasserId = null;
-                }
+                const filtered = nextIds.filter((id) => id !== player.playerId);
+                setFilterIds(mode, filtered);
+                renderPlayerFilterOverlay();
+                renderFilterSummaries();
+                renderPlayerSelectors();
+                updateRecordButton();
+                return;
             }
 
-            renderPlayerFilters();
+            setFilterIds(mode, nextIds);
+            renderPlayerFilterOverlay();
+            renderFilterSummaries();
             renderPlayerSelectors();
             updateRecordButton();
         });
@@ -143,18 +198,22 @@ const renderPassButtons = () => {
 };
 
 const renderPlayerSelectors = () => {
-    const options = visiblePlayers().map((player) => ({
+    const serverOptions = visiblePlayers("server").map((player) => ({
+        id: player.playerId,
+        label: player.playerName,
+    }));
+    const passerOptions = visiblePlayers("passer").map((player) => ({
         id: player.playerId,
         label: player.playerName,
     }));
 
-    renderSelectableButtons("serverOptions", options, sessionPageState.selectedServerId, (playerId) => {
+    renderSelectableButtons("serverOptions", serverOptions, sessionPageState.selectedServerId, (playerId) => {
         sessionPageState.selectedServerId = playerId;
         renderPlayerSelectors();
         updateRecordButton();
     });
 
-    renderSelectableButtons("passerOptions", options, sessionPageState.selectedPasserId, (playerId) => {
+    renderSelectableButtons("passerOptions", passerOptions, sessionPageState.selectedPasserId, (playerId) => {
         sessionPageState.selectedPasserId = playerId;
         renderPlayerSelectors();
         updateRecordButton();
@@ -199,13 +258,22 @@ const loadSession = async () => {
     }
 
     sessionPageState.players = payload.players || [];
-    if (sessionPageState.visiblePlayerIds.length === 0) {
-        sessionPageState.visiblePlayerIds = sessionPageState.players.map((player) => player.playerId);
+    if (sessionPageState.visibleServerIds.length === 0) {
+        sessionPageState.visibleServerIds = sessionPageState.players.map((player) => player.playerId);
     } else {
         const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
-        sessionPageState.visiblePlayerIds = sessionPageState.visiblePlayerIds.filter((playerId) => validIds.has(playerId));
+        sessionPageState.visibleServerIds = sessionPageState.visibleServerIds.filter((playerId) => validIds.has(playerId));
     }
-    renderPlayerFilters();
+
+    if (sessionPageState.visiblePasserIds.length === 0) {
+        sessionPageState.visiblePasserIds = sessionPageState.players.map((player) => player.playerId);
+    } else {
+        const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
+        sessionPageState.visiblePasserIds = sessionPageState.visiblePasserIds.filter((playerId) => validIds.has(playerId));
+    }
+
+    renderFilterSummaries();
+    renderPlayerFilterOverlay();
     renderPlayerSelectors();
     renderPassButtons();
     renderRecentReps(payload.recentReps || []);
@@ -218,7 +286,8 @@ const resetSelection = () => {
     sessionPageState.selectedPassRating = null;
     sessionPageState.missedServe = false;
     document.getElementById("missedServe").checked = false;
-    renderPlayerFilters();
+    renderFilterSummaries();
+    renderPlayerFilterOverlay();
     renderPlayerSelectors();
     renderPassButtons();
     updateRecordButton();
@@ -240,18 +309,41 @@ const initializeSessionPage = async () => {
 
     await loadSession();
 
-    document.getElementById("showAllPlayersButton").addEventListener("click", () => {
-        sessionPageState.visiblePlayerIds = sessionPageState.players.map((player) => player.playerId);
-        renderPlayerFilters();
+    document.getElementById("editServerFilterButton").addEventListener("click", () => {
+        sessionPageState.activeFilterMode = "server";
+        renderPlayerFilterOverlay();
+    });
+
+    document.getElementById("editPasserFilterButton").addEventListener("click", () => {
+        sessionPageState.activeFilterMode = "passer";
+        renderPlayerFilterOverlay();
+    });
+
+    document.getElementById("closePlayerFilterOverlay").addEventListener("click", () => {
+        sessionPageState.activeFilterMode = null;
+        renderPlayerFilterOverlay();
+    });
+
+    document.getElementById("playerFilterOverlay").addEventListener("click", (event) => {
+        if (event.target.id === "playerFilterOverlay") {
+            sessionPageState.activeFilterMode = null;
+            renderPlayerFilterOverlay();
+        }
+    });
+
+    document.getElementById("overlayShowAllPlayersButton").addEventListener("click", () => {
+        const ids = sessionPageState.players.map((player) => player.playerId);
+        setFilterIds(sessionPageState.activeFilterMode, ids);
+        renderPlayerFilterOverlay();
+        renderFilterSummaries();
         renderPlayerSelectors();
         updateRecordButton();
     });
 
-    document.getElementById("hideAllPlayersButton").addEventListener("click", () => {
-        sessionPageState.visiblePlayerIds = [];
-        sessionPageState.selectedServerId = null;
-        sessionPageState.selectedPasserId = null;
-        renderPlayerFilters();
+    document.getElementById("overlayHideAllPlayersButton").addEventListener("click", () => {
+        setFilterIds(sessionPageState.activeFilterMode, []);
+        renderPlayerFilterOverlay();
+        renderFilterSummaries();
         renderPlayerSelectors();
         updateRecordButton();
     });
