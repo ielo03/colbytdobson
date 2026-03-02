@@ -12,6 +12,12 @@ const post = async (req, res) => {
     const ingredients = data.ingredients || '';
     const drink = data.drink || '';
 
+    if (typeof ingredients !== "string" || ingredients.length > 500) {
+        return res.status(400).json({
+            error: "Ingredients must be 500 characters or fewer.",
+        });
+    }
+
     try {
         const cocktails = await generateCocktails(ingredients, drink);
         return res.status(200).json({recipe: cocktails});
