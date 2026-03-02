@@ -1,133 +1,253 @@
 let teamName = null;
-let players = null;
+let initialized = false;
 
-async function fetchPlayers(teamName) {
-    try {
-        const response = await fetch(
-            `/api/servereceive/players?teamName=${teamName}`,{
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-        if (response.ok) {
-            players = await response.json();
-            console.log(players);
-            populateTable(players);
-            // displayPlayers(players);
-        } else {
-            alert("Failed to fetch players. Please check the team name.");
-        }
-    } catch (err) {
-        console.error("Error fetching players:", err);
-        alert("An error occurred while fetching the players.");
-    }
-}
+const getPage = () => document.getElementById("servereceiveTeamPage");
 
-async function createSession() {
-    const sessionValue = document.getElementById("session").value;
-
-    if (!sessionValue) {
-        alert("Please enter a session name.");
-        return;
+const authorizedFetch = async (url, options = {}) => {
+    const hasToken = await ensureAccessToken();
+    if (!hasToken) {
+        throw new Error("You must be logged in to use serve receive.");
     }
 
-    try {
-        const response = await fetch("/api/create-session", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ session: sessionValue }),
-        });
+    const headers = {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${App.accessToken}`,
+    };
 
-        if (response.ok) {
-            alert("Session created successfully!");
-            document.getElementById("session").value = ""; // Clear input
-        } else {
-            alert("Failed to create session.");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while creating the session.");
-    }
-}
+    return fetch(url, {
+        ...options,
+        headers,
+    });
+};
 
-const populateTable = (data) => {
-    if (!data) data = players;
-    console.log(`Data: ${JSON.stringify(data)}`);
+const setMessage = (id, message, isError = false) => {
+    const element = document.getElementById(id);
+    element.textContent = message || "";
+    element.className = `inline-message${message ? (isError ? " error" : " success") : ""}`;
+};
+
+const refreshPlayers = async () => {
+    const response = await authorizedFetch(
+        `/api/servereceive/players?teamName=${encodeURIComponent(teamName)}`
+    );
+    const players = await response.json();
     const tableBody = document.getElementById("playersTable").querySelector("tbody");
+    const playersCount = document.getElementById("playersCount");
 
-    // Clear existing rows
+    playersCount.textContent = `${players.length} players`;
     tableBody.innerHTML = "";
 
-    // Add rows dynamically
-    data.forEach((item) => {
+    players.forEach((player) => {
         const row = document.createElement("tr");
-
-        const rowData = [
-            item.playerName,
-            item.averagePassRating,
-            item.totalPasses,
-            item.averageServeRating,
-            item.totalServes,
+        const values = [
+            player.playerName,
+            Number(player.averagePassRating || 0).toFixed(2),
+            player.totalPasses || 0,
+            Number(player.averageServeRating || 0).toFixed(2),
+            player.totalServes || 0,
         ];
 
-        rowData.forEach((value) => {
+        values.forEach((value) => {
             const cell = document.createElement("td");
             cell.textContent = value;
             row.appendChild(cell);
         });
 
+        const actionCell = document.createElement("td");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "danger-button";
+        button.textContent = "Remove";
+        button.addEventListener("click", async () => {
+            if (!window.confirm(`Remove ${player.playerName}?`)) {
+                return;
+            }
+
+            const response = await authorizedFetch(
+                `/api/servereceive/player?teamName=${encodeURIComponent(teamName)}&playerId=${player.playerId}`,
+                { method: "DELETE" }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to remove player");
+            }
+
+            await refreshPlayers();
+        });
+        actionCell.appendChild(button);
+        row.appendChild(actionCell);
         tableBody.appendChild(row);
     });
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const message = urlParams.get("message");
-    if (message) {
-        alert(message);
-        const newUrl = window.location.origin + window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
+const refreshSessions = async () => {
+    const response = await authorizedFetch(
+        `/api/servereceive/sessions?teamName=${encodeURIComponent(teamName)}`
+    );
+    const sessions = await response.json();
+    const sessionsList = document.getElementById("sessionsList");
+    const sessionsCount = document.getElementById("sessionsCount");
+
+    sessionsCount.textContent = `${sessions.length} sessions`;
+    sessionsList.innerHTML = "";
+
+    if (sessions.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "muted-text";
+        empty.textContent = "No sessions yet.";
+        sessionsList.appendChild(empty);
+        return;
     }
 
-    teamName = document.getElementById('manage').innerText.split(' ')[1];
-    players = await fetchPlayers(teamName);
+    sessions.forEach((session) => {
+        const row = document.createElement("div");
+        row.className = "action-row";
 
-    document
-        .getElementById("addPlayerForm")
-        .addEventListener("submit", async function (event) {
-            event.preventDefault();
+        const meta = document.createElement("div");
+        meta.className = "action-row-main";
 
-            const playerName = document.getElementById("player").value;
+        const link = document.createElement("a");
+        link.className = "text-link";
+        link.href = `/servereceive/${encodeURIComponent(teamName)}/${encodeURIComponent(session.sessionName)}`;
+        link.textContent = session.sessionName;
+        meta.appendChild(link);
 
-            if (playerName) {
-                try {
-                    const response = await fetch(
-                        "/api/servereceive/player",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({ teamName, playerName }),
-                        }
-                    );
+        const detail = document.createElement("span");
+        detail.className = "muted-text";
+        detail.textContent = `${session.totalReps || 0} reps`;
+        meta.appendChild(detail);
 
-                    if (response.ok) {
-                        document.getElementById("player").value = "";
-                        await fetchPlayers(teamName);
-                    } else {
-                        const error = await response.json();
-                        alert(`Failed to add player: ${error.message}`);
-                    }
-                } catch (err) {
-                    console.error("Error adding player:", err);
-                    alert("An error occurred while adding the player.");
-                }
-            } else {
-                await fetchPlayers(teamName);
+        const actions = document.createElement("div");
+        actions.className = "action-row-buttons";
+
+        const openButton = document.createElement("a");
+        openButton.className = "secondary-button";
+        openButton.href = link.href;
+        openButton.textContent = "Open";
+        actions.appendChild(openButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "danger-button";
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", async () => {
+            if (!window.confirm(`Delete session ${session.sessionName}?`)) {
+                return;
             }
+
+            const response = await authorizedFetch(
+                `/api/servereceive/session?teamName=${encodeURIComponent(teamName)}&sessionId=${session.sessionId}`,
+                { method: "DELETE" }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to delete session");
+            }
+
+            await refreshSessions();
         });
-});
+        actions.appendChild(deleteButton);
+
+        row.appendChild(meta);
+        row.appendChild(actions);
+        sessionsList.appendChild(row);
+    });
+};
+
+const initializePage = async () => {
+    if (initialized) {
+        return;
+    }
+
+    const page = getPage();
+    if (!page) {
+        return;
+    }
+
+    initialized = true;
+    teamName = page.dataset.teamName;
+
+    try {
+        await Promise.all([refreshPlayers(), refreshSessions()]);
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Failed to load team data.");
+    }
+
+    document.getElementById("addPlayerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setMessage("playerResult", "");
+
+        const playerName = document.getElementById("player").value.trim();
+        if (!playerName) {
+            setMessage("playerResult", "Enter a player name.", true);
+            return;
+        }
+
+        const response = await authorizedFetch("/api/servereceive/player", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ teamName, playerName }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+            setMessage("playerResult", payload.error || "Failed to add player.", true);
+            return;
+        }
+
+        document.getElementById("player").value = "";
+        setMessage("playerResult", "Player added.");
+        await refreshPlayers();
+    });
+
+    document.getElementById("sessionForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setMessage("sessionResult", "");
+
+        const sessionName = document.getElementById("session").value.trim();
+        if (!sessionName) {
+            setMessage("sessionResult", "Enter a session name.", true);
+            return;
+        }
+
+        const response = await authorizedFetch("/api/servereceive/session", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ teamName, sessionName }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+            setMessage("sessionResult", payload.error || "Failed to create session.", true);
+            return;
+        }
+
+        document.getElementById("session").value = "";
+        setMessage("sessionResult", "Session created.");
+        await refreshSessions();
+    });
+};
+
+const maybeInitializePage = async () => {
+    if (!App.accessToken && !App?.cookies?.refreshTokenExpiry) {
+        return;
+    }
+
+    try {
+        await initializePage();
+    } catch (error) {
+        initialized = false;
+        console.error(error);
+        alert(error.message || "Failed to initialize team page.");
+    }
+};
+
+document.addEventListener("DOMContentLoaded", maybeInitializePage);
+window.addEventListener("loggedIn", maybeInitializePage);

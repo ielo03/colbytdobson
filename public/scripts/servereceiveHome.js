@@ -18,8 +18,8 @@ const refreshTeams = async () => {
         for (const team of teams) {
             const teamLink = document.createElement('a');     // Create a new <a> element
 
-            teamLink.id = `team${team.id}`;                   // Set the ID as team${id}
-            teamLink.href = `/servereceive/${team.teamName}`; // Set the href as required
+            teamLink.id = `team${team.teamId}`;               // Set the ID as team${id}
+            teamLink.href = `/servereceive/${encodeURIComponent(team.teamName)}`;
             teamLink.textContent = team.teamName;            // Set the link text to the team name
             teamLink.className = 'purple-button';
 

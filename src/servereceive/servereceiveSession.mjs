@@ -21,6 +21,8 @@ const get = async (req, res) => {
         loginRequired: "true",
         teamId: teamId,
         sessionId: sessionId,
+        teamName,
+        sessionName,
     });
 };
 

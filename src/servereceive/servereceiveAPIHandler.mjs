@@ -2,6 +2,10 @@ import team from "./api/team.mjs";
 import teams from "./api/teams.mjs";
 import players from "./api/players.mjs";
 import player from "./api/player.mjs";
+import sessions from "./api/sessions.mjs";
+import session from "./api/session.mjs";
+import rep from "./api/rep.mjs";
+import stats from "./api/stats.mjs";
 
 const servereceiveAPIHandler = (req, res) => {
     if (!req.user?.userId) {
@@ -25,6 +29,34 @@ const servereceiveAPIHandler = (req, res) => {
 
         case 'POST/player': {
             return player.post(req, res);
+        }
+
+        case 'DELETE/player': {
+            return player.del(req, res);
+        }
+
+        case 'GET/sessions': {
+            return sessions.get(req, res);
+        }
+
+        case 'POST/session': {
+            return sessions.post(req, res);
+        }
+
+        case 'DELETE/session': {
+            return sessions.del(req, res);
+        }
+
+        case 'GET/session': {
+            return session.get(req, res);
+        }
+
+        case 'POST/rep': {
+            return rep.post(req, res);
+        }
+
+        case 'GET/stats': {
+            return stats.get(req, res);
         }
 
         default: {

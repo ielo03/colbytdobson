@@ -1,0 +1,62 @@
+<div id="servereceiveStatsPage" data-team-name="{{teamName}}" data-team-id="{{teamId}}">
+    <div class="page-header">
+        <div>
+            <h1>{{title}}</h1>
+            <p class="muted-text">Filter sessions to recalculate team and player serve receive stats.</p>
+        </div>
+        <a class="purple-button" href="/servereceive/{{teamName}}">Back To Team</a>
+    </div>
+
+    <section class="panel-card">
+        <div class="section-header">
+            <h2>Sessions Included</h2>
+            <button id="refreshStatsButton" type="button">Refresh Stats</button>
+        </div>
+        <div id="statsSessions" class="checkbox-grid"></div>
+    </section>
+
+    <div class="servereceive-grid stats-summary-grid" id="overallStats"></div>
+
+    <section class="panel-card">
+        <div class="section-header">
+            <h2>Player Breakdown</h2>
+            <span id="statsPlayerCount" class="pill-label"></span>
+        </div>
+        <div class="table-wrapper">
+            <table class="custom-table" id="statsPlayersTable">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Average Pass Rating</th>
+                    <th>Total Passes</th>
+                    <th>Average Serve Rating</th>
+                    <th>Total Serves</th>
+                    <th>Missed Serves</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel-card">
+        <div class="section-header">
+            <h2>Session Breakdown</h2>
+            <span id="statsSessionCount" class="pill-label"></span>
+        </div>
+        <div class="table-wrapper">
+            <table class="custom-table" id="statsSessionsTable">
+                <thead>
+                <tr>
+                    <th>Session</th>
+                    <th>Total Reps</th>
+                    <th>Average Pass Rating</th>
+                    <th>Average Serve Rating</th>
+                    <th>Missed Serves</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+</div>

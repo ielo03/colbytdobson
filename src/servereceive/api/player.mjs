@@ -1,9 +1,7 @@
-import {getTeamId, newConnection} from "../../utils/dbUtils.mjs";
+import {createPlayer, getTeamId, removePlayer} from "../../utils/dbUtils.mjs";
 
 const post = async (req, res) => {
     try {
-        console.log("Received event:", req.body);
-
         const { teamName, playerName } = req.body;
 
         if (
@@ -19,28 +17,15 @@ const post = async (req, res) => {
         }
 
         const teamId = await getTeamId(req.user?.userId, teamName);
+        if (teamId === -1) {
+            return res.status(404).json({ error: "Team not found" });
+        }
 
-        let connection;
         try {
-            connection = await newConnection();
-            console.log("Connected to the database");
-            // Start a transaction
-            // Insert into teams
-            const [result] = await connection.execute(
-                `INSERT INTO players (teamId, playerName) VALUES (?, ?)`,
-                [teamId, playerName]
-            );
-            // Get the auto-incremented teamId
-            const playerId = result.insertId;
-            console.log("Player created successfully:", playerId);
+            await createPlayer(req.user.userId, teamId, playerName.trim());
             return res.status(201).json({ message: "Player created"});
         } catch (err) {
-            console.error("Database error:", err);
-            // Rollback the transaction in case of an error
-            if (connection) await connection.rollback();
-            return res.status(500).json({ error: "Internal database error" });
-        } finally {
-            if (connection) await connection.end();
+            return res.status(err.code || 500).json({ error: err.message || "Internal database error" });
         }
     } catch (error) {
         console.error("Error processing request:", error.message || error.stack);
@@ -48,6 +33,28 @@ const post = async (req, res) => {
     }
 };
 
+const del = async (req, res) => {
+    try {
+        const { teamName, playerId } = req.query;
+
+        if (!teamName || !playerId) {
+            return res.status(400).json({ error: "Missing team name or player id" });
+        }
+
+        const teamId = await getTeamId(req.user?.userId, teamName);
+        if (teamId === -1) {
+            return res.status(404).json({ error: "Team not found" });
+        }
+
+        await removePlayer(req.user.userId, teamId, Number(playerId));
+        return res.status(200).json({ message: "Player removed" });
+    } catch (error) {
+        console.error("Error processing request:", error.message || error.stack);
+        return res.status(error.code || 500).json({ error: error.message || "Internal Server Error" });
+    }
+};
+
 export default {
-    post
+    post,
+    del
 };

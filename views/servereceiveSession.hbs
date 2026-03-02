@@ -1,106 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Score Submission</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        margin: 0;
-      }
-      .player-button {
-        padding: 10px;
-        margin: 5px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .player-button:hover {
-        background-color: #45a049;
-      }
-      .score-button {
-        padding: 10px;
-        margin: 5px;
-        background-color: #2196f3;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .score-button:hover {
-        background-color: #0b7dda;
-      }
-      #scoreContainer {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Select Players and Score NEW</h1>
-    <div id="playersContainer"></div>
-    <div id="scoreContainer">
-      <h2>Select Score:</h2>
-      <button class="score-button" onclick="submitScore(0)">0</button>
-      <button class="score-button" onclick="submitScore(1)">1</button>
-      <button class="score-button" onclick="submitScore(2)">2</button>
-      <button class="score-button" onclick="submitScore(3)">3</button>
+<div
+    id="servereceiveSessionPage"
+    data-team-name="{{teamName}}"
+    data-team-id="{{teamId}}"
+    data-session-name="{{sessionName}}"
+    data-session-id="{{sessionId}}">
+    <div class="page-header">
+        <div>
+            <h1>{{title}}</h1>
+            <p class="muted-text">Select the server, optionally mark a missed serve, then select the passer and pass rating.</p>
+        </div>
+        <a class="purple-button" href="/servereceive/{{teamName}}">Back To Team</a>
     </div>
-    <script>
-      const playersData = JSON.parse("{{playersData}}");
-      let selections = [];
 
-      function selectPlayer(player) {
-        if (selections.length < 2 && !selections.includes(player)) {
-          selections.push(player);
-        } else {
-          alert("You can only select two players.");
-          return;
-        }
+    <section class="panel-card">
+        <div class="record-flow">
+            <div class="record-step">
+                <h2>1. Server</h2>
+                <div id="serverOptions" class="chip-grid"></div>
+            </div>
 
-        if (selections.length === 2) {
-          document.getElementById("scoreContainer").style.display = "block";
-        }
-      }
+            <div class="record-step">
+                <div class="toggle-row">
+                    <h2>2. Result</h2>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="missedServe" />
+                        Missed serve
+                    </label>
+                </div>
+                <div id="passerStep">
+                    <h3>Passer</h3>
+                    <div id="passerOptions" class="chip-grid"></div>
+                    <h3>Pass rating</h3>
+                    <div id="passRatingOptions" class="rating-grid"></div>
+                </div>
+                <div id="derivedServeRating" class="derived-rating">Serve rating: -</div>
+                <button id="recordRepButton" disabled>Record Rep</button>
+                <div id="recordResult" class="inline-message"></div>
+            </div>
+        </div>
+    </section>
 
-      function submitScore(score) {
-        const [player1, player2] = selections;
-        fetch("/api/add-score", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            team: player1.team,
-            player1: player1.player,
-            player2: player2.player,
-            score: score,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert("Score submitted successfully!");
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error("Failed to submit score:", error);
-            alert("Failed to submit score.");
-          });
-      }
-
-      function displayPlayers() {
-        const container = document.getElementById("playersContainer");
-        playersData.forEach((player) => {
-          const button = document.createElement("button");
-          button.className = "player-button";
-          button.textContent = player.player;
-          button.onclick = () => selectPlayer(player);
-          container.appendChild(button);
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", displayPlayers);
-    </script>
-  </body>
-</html>
+    <section class="panel-card">
+        <div class="section-header">
+            <h2>Recent Reps</h2>
+            <span id="recentCount" class="pill-label"></span>
+        </div>
+        <div class="table-wrapper">
+            <table class="custom-table" id="recentRepsTable">
+                <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Server</th>
+                    <th>Passer</th>
+                    <th>Missed Serve</th>
+                    <th>Pass Rating</th>
+                    <th>Serve Rating</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+</div>
