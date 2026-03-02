@@ -21,7 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
+      .then(async (response) => {
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.detail || result.error || "Unable to concoct a cocktail.");
+        }
+        return result;
+      })
       .then((result) => {
         // Display the response in the recipe div
         const recipeDiv = document.getElementById("recipe");
@@ -35,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => {
         console.error("Error:", error);
         const recipeDiv = document.getElementById("recipe");
-        recipeDiv.innerHTML = `<p>The cocktail blew up! Try again later.</p>`;
+        recipeDiv.innerHTML = `<p>The cocktail blew up: ${error.message}</p>`;
 
         // Revert button appearance to normal even in case of an error
         submitButton.value = "Concoct";

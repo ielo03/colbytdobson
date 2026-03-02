@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://colbytdobson.com/sitemap.xml

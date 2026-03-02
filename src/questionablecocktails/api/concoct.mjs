@@ -5,16 +5,23 @@ import env from "../../../environment.mjs";
 const genAI = new GoogleGenerativeAI(env.genai.geminiAPIKey);
 
 // Define the model
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", temperature: 0.9, top_p: 0.85 });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", temperature: 0.9, top_p: 0.85 });
 
 const post = async (req, res) => {
     const data = req.body;
     const ingredients = data.ingredients || '';
     const drink = data.drink || '';
 
-    const cocktails = await generateCocktails(ingredients, drink);
-
-    return res.status(200).json({recipe: cocktails});
+    try {
+        const cocktails = await generateCocktails(ingredients, drink);
+        return res.status(200).json({recipe: cocktails});
+    } catch (error) {
+        console.error(`Questionable Cocktails failed: ${error.message}`);
+        return res.status(error.status || 502).json({
+            error: "Unable to concoct a cocktail right now.",
+            detail: error.message || "Unknown upstream model error",
+        });
+    }
 };
 
 export default {
@@ -122,6 +129,6 @@ Format your response to be HTML-friendly, NOT the full html document, with the f
         return text;
     } catch (error) {
         console.error(`Error: ${error.message}`);
-        return null;
+        throw error;
     }
 }
