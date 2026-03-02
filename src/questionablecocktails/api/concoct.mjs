@@ -5,7 +5,7 @@ import env from "../../../environment.mjs";
 const genAI = new GoogleGenerativeAI(env.genai.geminiAPIKey);
 
 // Define the model
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", temperature: 0.9, top_p: 0.85 });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite", temperature: 0.9, top_p: 0.85 });
 
 const post = async (req, res) => {
     const data = req.body;
