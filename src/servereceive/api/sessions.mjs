@@ -24,7 +24,9 @@ const post = async (req, res) => {
             !sessionName ||
             typeof sessionName !== "string" ||
             sessionName.trim().length === 0 ||
-            sessionName.trim().length > 100
+            sessionName.trim().length > 100 ||
+            sessionName.includes("/") ||
+            sessionName.trim().toLowerCase() === "stats"
         ) {
             return res.status(400).json({ error: "Invalid team or session name" });
         }

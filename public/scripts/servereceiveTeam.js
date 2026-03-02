@@ -26,6 +26,51 @@ const setMessage = (id, message, isError = false) => {
     element.className = `inline-message${message ? (isError ? " error" : " success") : ""}`;
 };
 
+const createOverflowMenu = (actions) => {
+    const details = document.createElement("details");
+    details.className = "overflow-menu";
+
+    const summary = document.createElement("summary");
+    summary.className = "overflow-menu-trigger";
+    summary.setAttribute("aria-label", "Open actions menu");
+    summary.textContent = "\u2630";
+    details.appendChild(summary);
+
+    const menu = document.createElement("div");
+    menu.className = "overflow-menu-content";
+
+    actions.forEach((action) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = action.className || "danger-button";
+        button.textContent = action.label;
+        button.addEventListener("click", async () => {
+            details.removeAttribute("open");
+            await action.onClick();
+        });
+        menu.appendChild(button);
+    });
+
+    details.appendChild(menu);
+    return details;
+};
+
+const validateSessionName = (sessionName) => {
+    if (!sessionName) {
+        return "Enter a session name.";
+    }
+
+    if (sessionName.includes("/")) {
+        return "Session names cannot contain slashes.";
+    }
+
+    if (sessionName.toLowerCase() === "stats") {
+        return "Session name cannot be stats.";
+    }
+
+    return null;
+};
+
 const refreshPlayers = async () => {
     const response = await authorizedFetch(
         `/api/servereceive/players?teamName=${encodeURIComponent(teamName)}`
@@ -54,28 +99,29 @@ const refreshPlayers = async () => {
         });
 
         const actionCell = document.createElement("td");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "danger-button";
-        button.textContent = "Remove";
-        button.addEventListener("click", async () => {
-            if (!window.confirm(`Remove ${player.playerName}?`)) {
-                return;
-            }
+        actionCell.appendChild(createOverflowMenu([
+            {
+                label: "Remove Player",
+                className: "danger-button",
+                onClick: async () => {
+                    if (!window.confirm(`Remove ${player.playerName}?`)) {
+                        return;
+                    }
 
-            const response = await authorizedFetch(
-                `/api/servereceive/player?teamName=${encodeURIComponent(teamName)}&playerId=${player.playerId}`,
-                { method: "DELETE" }
-            );
+                    const response = await authorizedFetch(
+                        `/api/servereceive/player?teamName=${encodeURIComponent(teamName)}&playerId=${player.playerId}`,
+                        { method: "DELETE" }
+                    );
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to remove player");
-            }
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || "Failed to remove player");
+                    }
 
-            await refreshPlayers();
-        });
-        actionCell.appendChild(button);
+                    await refreshPlayers();
+                },
+            },
+        ]));
         row.appendChild(actionCell);
         tableBody.appendChild(row);
     });
@@ -126,29 +172,29 @@ const refreshSessions = async () => {
         openButton.href = link.href;
         openButton.textContent = "Open";
         actions.appendChild(openButton);
+        actions.appendChild(createOverflowMenu([
+            {
+                label: "Delete Session",
+                className: "danger-button",
+                onClick: async () => {
+                    if (!window.confirm(`Delete session ${session.sessionName}?`)) {
+                        return;
+                    }
 
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.className = "danger-button";
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener("click", async () => {
-            if (!window.confirm(`Delete session ${session.sessionName}?`)) {
-                return;
-            }
+                    const response = await authorizedFetch(
+                        `/api/servereceive/session?teamName=${encodeURIComponent(teamName)}&sessionId=${session.sessionId}`,
+                        { method: "DELETE" }
+                    );
 
-            const response = await authorizedFetch(
-                `/api/servereceive/session?teamName=${encodeURIComponent(teamName)}&sessionId=${session.sessionId}`,
-                { method: "DELETE" }
-            );
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || "Failed to delete session");
+                    }
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to delete session");
-            }
-
-            await refreshSessions();
-        });
-        actions.appendChild(deleteButton);
+                    await refreshSessions();
+                },
+            },
+        ]));
 
         row.appendChild(meta);
         row.appendChild(actions);
@@ -210,8 +256,9 @@ const initializePage = async () => {
         setMessage("sessionResult", "");
 
         const sessionName = document.getElementById("session").value.trim();
-        if (!sessionName) {
-            setMessage("sessionResult", "Enter a session name.", true);
+        const validationError = validateSessionName(sessionName);
+        if (validationError) {
+            setMessage("sessionResult", validationError, true);
             return;
         }
 

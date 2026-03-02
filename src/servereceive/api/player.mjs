@@ -8,6 +8,7 @@ const post = async (req, res) => {
             !teamName ||
             typeof teamName !== "string" ||
             teamName.length > 20 ||
+            teamName.includes("/") ||
             !/^[a-z0-9_\-'.]+$/.test(teamName) ||
             !playerName ||
             typeof playerName !== "string"

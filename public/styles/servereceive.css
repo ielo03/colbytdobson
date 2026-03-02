@@ -135,6 +135,46 @@
     grid-auto-flow: column;
 }
 
+.overflow-menu {
+    position: relative;
+}
+
+.overflow-menu summary {
+    list-style: none;
+}
+
+.overflow-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.overflow-menu-trigger {
+    align-items: center;
+    background: #191919;
+    border: 1px solid #4F4B47;
+    border-radius: 999px;
+    color: #DCEFFF;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1.1rem;
+    height: 2.5rem;
+    justify-content: center;
+    width: 2.5rem;
+}
+
+.overflow-menu-content {
+    background: #262422;
+    border: 1px solid #4F4B47;
+    border-radius: 12px;
+    display: grid;
+    gap: 0.5rem;
+    min-width: 11rem;
+    padding: 0.5rem;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    z-index: 10;
+}
+
 .text-link {
     color: #DCEFFF;
     font-weight: 700;

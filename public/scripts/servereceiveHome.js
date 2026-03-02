@@ -54,6 +54,13 @@ const validateTeamName = () => {
         return;
     }
 
+    if (createTeam.includes("/")) {
+        resultDiv.style.display = "block";
+        resultDiv.textContent = "Team name cannot contain slashes";
+        resultDiv.className = "error";
+        return;
+    }
+
     if (/[A-Z]/.test(createTeam)) {
         resultDiv.style.display = "block";
         resultDiv.textContent = "Team name must only contain lowercase letters";

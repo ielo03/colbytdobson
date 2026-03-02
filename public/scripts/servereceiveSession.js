@@ -2,6 +2,7 @@ let sessionPageState = {
     teamName: null,
     sessionName: null,
     players: [],
+    visiblePlayerIds: [],
     selectedServerId: null,
     selectedPasserId: null,
     selectedPassRating: null,
@@ -78,6 +79,55 @@ const renderSelectableButtons = (containerId, items, selectedId, onSelect) => {
     });
 };
 
+const visiblePlayers = () => {
+    if (!sessionPageState.visiblePlayerIds.length) {
+        return [];
+    }
+
+    const visibleIds = new Set(sessionPageState.visiblePlayerIds);
+    return sessionPageState.players.filter((player) => visibleIds.has(player.playerId));
+};
+
+const renderPlayerFilters = () => {
+    const container = document.getElementById("playerFilterOptions");
+    container.innerHTML = "";
+
+    sessionPageState.players.forEach((player) => {
+        const label = document.createElement("label");
+        label.className = "checkbox-card";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = sessionPageState.visiblePlayerIds.includes(player.playerId);
+        input.addEventListener("change", () => {
+            if (input.checked) {
+                if (!sessionPageState.visiblePlayerIds.includes(player.playerId)) {
+                    sessionPageState.visiblePlayerIds.push(player.playerId);
+                }
+            } else {
+                sessionPageState.visiblePlayerIds = sessionPageState.visiblePlayerIds.filter((id) => id !== player.playerId);
+                if (!sessionPageState.visiblePlayerIds.includes(sessionPageState.selectedServerId)) {
+                    sessionPageState.selectedServerId = null;
+                }
+                if (!sessionPageState.visiblePlayerIds.includes(sessionPageState.selectedPasserId)) {
+                    sessionPageState.selectedPasserId = null;
+                }
+            }
+
+            renderPlayerFilters();
+            renderPlayerSelectors();
+            updateRecordButton();
+        });
+
+        const text = document.createElement("span");
+        text.textContent = player.playerName;
+
+        label.appendChild(input);
+        label.appendChild(text);
+        container.appendChild(label);
+    });
+};
+
 const renderPassButtons = () => {
     const ratings = [0, 1, 2, 3].map((value) => ({ id: value, label: String(value) }));
     renderSelectableButtons(
@@ -93,7 +143,7 @@ const renderPassButtons = () => {
 };
 
 const renderPlayerSelectors = () => {
-    const options = sessionPageState.players.map((player) => ({
+    const options = visiblePlayers().map((player) => ({
         id: player.playerId,
         label: player.playerName,
     }));
@@ -149,6 +199,13 @@ const loadSession = async () => {
     }
 
     sessionPageState.players = payload.players || [];
+    if (sessionPageState.visiblePlayerIds.length === 0) {
+        sessionPageState.visiblePlayerIds = sessionPageState.players.map((player) => player.playerId);
+    } else {
+        const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
+        sessionPageState.visiblePlayerIds = sessionPageState.visiblePlayerIds.filter((playerId) => validIds.has(playerId));
+    }
+    renderPlayerFilters();
     renderPlayerSelectors();
     renderPassButtons();
     renderRecentReps(payload.recentReps || []);
@@ -161,6 +218,7 @@ const resetSelection = () => {
     sessionPageState.selectedPassRating = null;
     sessionPageState.missedServe = false;
     document.getElementById("missedServe").checked = false;
+    renderPlayerFilters();
     renderPlayerSelectors();
     renderPassButtons();
     updateRecordButton();
@@ -181,6 +239,22 @@ const initializeSessionPage = async () => {
     sessionPageState.sessionName = page.dataset.sessionName;
 
     await loadSession();
+
+    document.getElementById("showAllPlayersButton").addEventListener("click", () => {
+        sessionPageState.visiblePlayerIds = sessionPageState.players.map((player) => player.playerId);
+        renderPlayerFilters();
+        renderPlayerSelectors();
+        updateRecordButton();
+    });
+
+    document.getElementById("hideAllPlayersButton").addEventListener("click", () => {
+        sessionPageState.visiblePlayerIds = [];
+        sessionPageState.selectedServerId = null;
+        sessionPageState.selectedPasserId = null;
+        renderPlayerFilters();
+        renderPlayerSelectors();
+        updateRecordButton();
+    });
 
     document.getElementById("missedServe").addEventListener("change", (event) => {
         sessionPageState.missedServe = event.target.checked;
