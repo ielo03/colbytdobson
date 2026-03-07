@@ -1,6 +1,6 @@
 const servereceive = (req, res) => {
     const regex = /^\/sr/;
-    const path = "/serverecieve";
+    const path = "/servereceive";
     const newPath = req.originalUrl.replace(regex, path);
     return res.redirect(301, newPath);
 };
