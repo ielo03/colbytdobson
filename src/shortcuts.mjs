@@ -5,13 +5,6 @@ const servereceive = (req, res) => {
     return res.redirect(301, newPath);
 };
 
-const dynamicresume = (req, res) => {
-    const regex = /^\/dr/;
-    const path = "/dynamicresume";
-    const newPath = req.originalUrl.replace(regex, path);
-    return res.redirect(301, newPath);
-};
-
 const questionablecocktails = (req, res) => {
     const regex = /^\/qc/;
     const path = "/questionablecocktails";
@@ -28,7 +21,6 @@ const myresume = (req, res) => {
 
 export default {
     servereceive,
-    dynamicresume,
     questionablecocktails,
     myresume,
 };

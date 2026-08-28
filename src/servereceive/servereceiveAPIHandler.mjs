@@ -55,6 +55,14 @@ const servereceiveAPIHandler = (req, res) => {
             return rep.post(req, res);
         }
 
+        case 'PUT/rep': {
+            return rep.put(req, res);
+        }
+
+        case 'DELETE/rep': {
+            return rep.del(req, res);
+        }
+
         case 'GET/stats': {
             return stats.get(req, res);
         }

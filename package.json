@@ -5,6 +5,7 @@
   "description": "My web development class final project",
   "main": "index.mjs",
   "scripts": {
+    "start": "node index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,7 +32,6 @@
   },
   "homepage": "https://github.com/ielo03/web-dev-final#readme",
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.734.0",
     "@google/generative-ai": "^0.21.0",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
@@ -41,7 +41,6 @@
     "express-handlebars": "^7.1.2",
     "express-session": "^1.17.3",
     "google-auth-library": "^9.15.0",
-    "json5": "^2.2.3",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
     "xss": "^1.0.14"

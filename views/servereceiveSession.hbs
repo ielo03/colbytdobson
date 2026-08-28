@@ -17,10 +17,12 @@
             <h2>Player Filters</h2>
         </div>
         <div class="action-row-buttons filter-button-row">
+            <button type="button" id="editAbsentPlayersButton" class="secondary-button">Players Not Here</button>
             <button type="button" id="editServerFilterButton" class="secondary-button">Edit Servers</button>
             <button type="button" id="editPasserFilterButton" class="secondary-button">Edit Receivers</button>
         </div>
         <div class="filter-summary-grid">
+            <div class="derived-rating" id="absentFilterSummary">Not here: 0</div>
             <div class="derived-rating" id="serverFilterSummary">Servers shown: -</div>
             <div class="derived-rating" id="passerFilterSummary">Receivers shown: -</div>
         </div>
@@ -48,7 +50,10 @@
                     <div id="passRatingOptions" class="rating-grid"></div>
                 </div>
                 <div id="derivedServeRating" class="derived-rating">Serve rating: -</div>
-                <button id="recordRepButton" disabled>Record Rep</button>
+                <div class="rep-form-actions">
+                    <button id="recordRepButton" disabled>Record Rep</button>
+                    <button type="button" id="cancelEditRepButton" class="secondary-button" hidden>Cancel Edit</button>
+                </div>
                 <div id="recordResult" class="inline-message"></div>
             </div>
         </div>
@@ -69,6 +74,7 @@
                     <th>Missed Serve</th>
                     <th>Pass Rating</th>
                     <th>Serve Rating</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -86,6 +92,7 @@
         <div class="action-row-buttons filter-button-row">
             <button type="button" id="overlayShowAllPlayersButton" class="secondary-button">Show All</button>
             <button type="button" id="overlayHideAllPlayersButton" class="secondary-button">Hide All</button>
+            <button type="button" id="overlaySelectComplementButton" class="secondary-button" hidden></button>
         </div>
         <div id="playerFilterOverlayOptions" class="checkbox-grid"></div>
     </div>

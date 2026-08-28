@@ -647,6 +647,126 @@ export const recordServeReceiveRep = async (userId, teamId, sessionId, payload) 
     }
 };
 
+export const updateServeReceiveRep = async (userId, teamId, sessionId, repId, payload) => {
+    let connection;
+    try {
+        connection = await newConnection();
+        await ensureServeReceiveTables(connection);
+        await ensureAuthorizedTeam(connection, userId, teamId);
+
+        const { serverPlayerId, passerPlayerId, passRating, missedServe } = payload;
+
+        const [[rep]] = await connection.execute(
+            `
+                SELECT repId
+                FROM serveReceiveReps
+                WHERE repId = ? AND teamId = ? AND sessionId = ?
+                LIMIT 1
+            `,
+            [repId, teamId, sessionId]
+        );
+
+        if (!rep) {
+            throw Object.assign(new Error("Rep not found"), { code: 404 });
+        }
+
+        const [players] = await connection.execute(
+            `
+                SELECT playerId, playerName
+                FROM players
+                WHERE teamId = ? AND playerId IN (?, ?)
+            `,
+            [teamId, serverPlayerId || -1, passerPlayerId || -1]
+        );
+
+        const playerMap = new Map(players.map((player) => [player.playerId, player.playerName]));
+
+        if (!playerMap.has(serverPlayerId)) {
+            throw Object.assign(new Error("Server not found"), { code: 400 });
+        }
+
+        if (!missedServe && !playerMap.has(passerPlayerId)) {
+            throw Object.assign(new Error("Passer not found"), { code: 400 });
+        }
+
+        let serveRating;
+        let normalizedPassRating = null;
+
+        if (missedServe) {
+            serveRating = 0;
+        } else {
+            normalizedPassRating = Number(passRating);
+            if (![0, 1, 2, 3].includes(normalizedPassRating)) {
+                throw Object.assign(new Error("Pass rating must be between 0 and 3"), { code: 400 });
+            }
+            serveRating = normalizedPassRating >= 2 ? 4 - normalizedPassRating : 3;
+        }
+
+        await connection.execute(
+            `
+                UPDATE serveReceiveReps
+                SET serverPlayerId = ?,
+                    serverName = ?,
+                    passerPlayerId = ?,
+                    passerName = ?,
+                    passRating = ?,
+                    serveRating = ?,
+                    missedServe = ?
+                WHERE repId = ? AND teamId = ? AND sessionId = ?
+            `,
+            [
+                serverPlayerId,
+                playerMap.get(serverPlayerId),
+                missedServe ? null : passerPlayerId,
+                missedServe ? null : playerMap.get(passerPlayerId),
+                normalizedPassRating,
+                serveRating,
+                missedServe ? 1 : 0,
+                repId,
+                teamId,
+                sessionId,
+            ]
+        );
+    } catch (err) {
+        console.error("Database error:", err);
+        if (err.code) {
+            throw err;
+        }
+        throw Object.assign(new Error("Internal database error"), { code: 500 });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
+export const removeServeReceiveRep = async (userId, teamId, sessionId, repId) => {
+    let connection;
+    try {
+        connection = await newConnection();
+        await ensureServeReceiveTables(connection);
+        await ensureAuthorizedTeam(connection, userId, teamId);
+
+        const [result] = await connection.execute(
+            `
+                DELETE FROM serveReceiveReps
+                WHERE repId = ? AND teamId = ? AND sessionId = ?
+            `,
+            [repId, teamId, sessionId]
+        );
+
+        if (result.affectedRows === 0) {
+            throw Object.assign(new Error("Rep not found"), { code: 404 });
+        }
+    } catch (err) {
+        console.error("Database error:", err);
+        if (err.code) {
+            throw err;
+        }
+        throw Object.assign(new Error("Internal database error"), { code: 500 });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
 export const getTeamStats = async (userId, teamId, sessionIds = []) => {
     let connection;
     try {

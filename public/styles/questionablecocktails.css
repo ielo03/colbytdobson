@@ -24,6 +24,11 @@ h4 {
   text-align: center;
 }
 
+.qc-description {
+  margin: 0 auto 20px;
+  text-align: center;
+}
+
 /* Styling for the labels */
 label {
   font-size: 1em;

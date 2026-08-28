@@ -4,11 +4,14 @@ let sessionPageState = {
     players: [],
     visibleServerIds: [],
     visiblePasserIds: [],
+    absentPlayerIds: [],
+    playerFiltersInitialized: false,
     activeFilterMode: null,
     selectedServerId: null,
     selectedPasserId: null,
     selectedPassRating: null,
     missedServe: false,
+    editingRepId: null,
 };
 let initialized = false;
 
@@ -54,6 +57,7 @@ const currentServeRating = () => {
 
 const updateRecordButton = () => {
     const button = document.getElementById("recordRepButton");
+    const cancelButton = document.getElementById("cancelEditRepButton");
     const derived = document.getElementById("derivedServeRating");
     const passerStep = document.getElementById("passerStep");
     const ready = sessionPageState.selectedServerId !== null && (
@@ -64,6 +68,8 @@ const updateRecordButton = () => {
     passerStep.style.display = sessionPageState.missedServe ? "none" : "block";
     const serveRating = currentServeRating();
     derived.textContent = `Serve rating: ${serveRating === null ? "-" : serveRating}`;
+    button.textContent = sessionPageState.editingRepId === null ? "Record Rep" : "Save Changes";
+    cancelButton.hidden = sessionPageState.editingRepId === null;
     button.disabled = !ready;
 };
 
@@ -90,29 +96,46 @@ const visiblePlayers = (mode) => {
     }
 
     const visibleIds = new Set(ids);
-    return sessionPageState.players.filter((player) => visibleIds.has(player.playerId));
+    const absentIds = new Set(sessionPageState.absentPlayerIds);
+    const selectedId = mode === "server"
+        ? sessionPageState.selectedServerId
+        : sessionPageState.selectedPasserId;
+    return sessionPageState.players.filter((player) => (
+        visibleIds.has(player.playerId) && (!absentIds.has(player.playerId) || player.playerId === selectedId)
+    ));
+};
+
+const presentPlayers = () => {
+    const absentIds = new Set(sessionPageState.absentPlayerIds);
+    return sessionPageState.players.filter((player) => !absentIds.has(player.playerId));
 };
 
 const summarizeFilter = (ids) => {
-    if (ids.length === 0) {
+    const presentIds = new Set(presentPlayers().map((player) => player.playerId));
+    const visibleCount = ids.filter((id) => presentIds.has(id)).length;
+
+    if (visibleCount === 0) {
         return "none";
     }
 
-    if (ids.length === sessionPageState.players.length) {
+    if (visibleCount === presentIds.size) {
         return "all";
     }
 
-    return `${ids.length}`;
+    return `${visibleCount}`;
 };
 
 const renderFilterSummaries = () => {
+    document.getElementById("absentFilterSummary").textContent = `Not here: ${sessionPageState.absentPlayerIds.length}`;
     document.getElementById("serverFilterSummary").textContent = `Servers shown: ${summarizeFilter(sessionPageState.visibleServerIds)}`;
     document.getElementById("passerFilterSummary").textContent = `Receivers shown: ${summarizeFilter(sessionPageState.visiblePasserIds)}`;
 };
 
 const getFilterIds = (mode) => mode === "server"
     ? sessionPageState.visibleServerIds
-    : sessionPageState.visiblePasserIds;
+    : mode === "passer"
+        ? sessionPageState.visiblePasserIds
+        : sessionPageState.absentPlayerIds;
 
 const setFilterIds = (mode, ids) => {
     if (mode === "server") {
@@ -120,18 +143,38 @@ const setFilterIds = (mode, ids) => {
         if (!ids.includes(sessionPageState.selectedServerId)) {
             sessionPageState.selectedServerId = null;
         }
-    } else {
+    } else if (mode === "passer") {
         sessionPageState.visiblePasserIds = ids;
         if (!ids.includes(sessionPageState.selectedPasserId)) {
             sessionPageState.selectedPasserId = null;
         }
+    } else {
+        sessionPageState.absentPlayerIds = ids;
+        if (ids.includes(sessionPageState.selectedServerId)) {
+            sessionPageState.selectedServerId = null;
+        }
+        if (ids.includes(sessionPageState.selectedPasserId)) {
+            sessionPageState.selectedPasserId = null;
+        }
     }
+};
+
+const complementFilterIds = (mode) => {
+    const oppositeIds = new Set(mode === "server"
+        ? sessionPageState.visiblePasserIds
+        : sessionPageState.visibleServerIds);
+    return presentPlayers()
+        .map((player) => player.playerId)
+        .filter((playerId) => !oppositeIds.has(playerId));
 };
 
 const renderPlayerFilterOverlay = () => {
     const overlay = document.getElementById("playerFilterOverlay");
     const container = document.getElementById("playerFilterOverlayOptions");
     const title = document.getElementById("playerFilterOverlayTitle");
+    const showAllButton = document.getElementById("overlayShowAllPlayersButton");
+    const hideAllButton = document.getElementById("overlayHideAllPlayersButton");
+    const complementButton = document.getElementById("overlaySelectComplementButton");
     const mode = sessionPageState.activeFilterMode;
 
     if (!mode) {
@@ -140,11 +183,20 @@ const renderPlayerFilterOverlay = () => {
     }
 
     overlay.hidden = false;
-    title.textContent = mode === "server" ? "Edit Servers" : "Edit Receivers";
+    title.textContent = mode === "server"
+        ? "Edit Servers"
+        : mode === "passer"
+            ? "Edit Receivers"
+            : "Players Not Here";
+    showAllButton.textContent = mode === "absent" ? "Mark All Not Here" : "Show All";
+    hideAllButton.textContent = mode === "absent" ? "Mark Everyone Here" : "Hide All";
+    complementButton.hidden = mode === "absent";
+    complementButton.textContent = mode === "server" ? "Select Non-Receivers" : "Select Non-Servers";
     container.innerHTML = "";
     const currentIds = getFilterIds(mode);
+    const availablePlayers = mode === "absent" ? sessionPageState.players : presentPlayers();
 
-    sessionPageState.players.forEach((player) => {
+    availablePlayers.forEach((player) => {
         const label = document.createElement("label");
         label.className = "checkbox-card";
 
@@ -243,8 +295,86 @@ const renderRecentReps = (recentReps) => {
             row.appendChild(cell);
         });
 
+        const actionsCell = document.createElement("td");
+        const actions = document.createElement("div");
+        actions.className = "rep-row-actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "secondary-button compact-button";
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", () => beginEditingRep(rep));
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "danger-button compact-button";
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", () => deleteRep(rep));
+
+        actions.appendChild(editButton);
+        actions.appendChild(deleteButton);
+        actionsCell.appendChild(actions);
+        row.appendChild(actionsCell);
+
         tbody.appendChild(row);
     });
+};
+
+const beginEditingRep = (rep) => {
+    sessionPageState.editingRepId = rep.repId;
+    sessionPageState.selectedServerId = rep.serverPlayerId;
+    sessionPageState.selectedPasserId = rep.missedServe ? null : rep.passerPlayerId;
+    sessionPageState.selectedPassRating = rep.missedServe ? null : Number(rep.passRating);
+    sessionPageState.missedServe = Boolean(rep.missedServe);
+
+    if (!sessionPageState.visibleServerIds.includes(rep.serverPlayerId)) {
+        sessionPageState.visibleServerIds.push(rep.serverPlayerId);
+    }
+    if (rep.passerPlayerId && !sessionPageState.visiblePasserIds.includes(rep.passerPlayerId)) {
+        sessionPageState.visiblePasserIds.push(rep.passerPlayerId);
+    }
+
+    document.getElementById("missedServe").checked = sessionPageState.missedServe;
+    setRecordMessage("Editing selected rep.");
+    renderFilterSummaries();
+    renderPlayerSelectors();
+    renderPassButtons();
+    updateRecordButton();
+    document.querySelector(".record-flow").scrollIntoView({behavior: "smooth", block: "start"});
+};
+
+const deleteRep = async (rep) => {
+    const label = `${rep.serverName || "Unknown server"} at ${new Date(rep.createdAt).toLocaleString()}`;
+    if (!window.confirm(`Delete the rep by ${label}? This cannot be undone.`)) {
+        return;
+    }
+
+    try {
+        const response = await authorizedFetch("/api/servereceive/rep", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                teamName: sessionPageState.teamName,
+                sessionName: sessionPageState.sessionName,
+                repId: rep.repId,
+            }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+            throw new Error(payload.error || "Failed to delete rep.");
+        }
+
+        if (sessionPageState.editingRepId === rep.repId) {
+            resetSelection();
+        }
+        setRecordMessage("Rep deleted.");
+        await loadSession();
+    } catch (error) {
+        setRecordMessage(error.message || "Failed to delete rep.", true);
+    }
 };
 
 const loadSession = async () => {
@@ -258,17 +388,14 @@ const loadSession = async () => {
     }
 
     sessionPageState.players = payload.players || [];
-    if (sessionPageState.visibleServerIds.length === 0) {
+    const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
+    sessionPageState.absentPlayerIds = sessionPageState.absentPlayerIds.filter((playerId) => validIds.has(playerId));
+    if (!sessionPageState.playerFiltersInitialized) {
         sessionPageState.visibleServerIds = sessionPageState.players.map((player) => player.playerId);
-    } else {
-        const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
-        sessionPageState.visibleServerIds = sessionPageState.visibleServerIds.filter((playerId) => validIds.has(playerId));
-    }
-
-    if (sessionPageState.visiblePasserIds.length === 0) {
         sessionPageState.visiblePasserIds = sessionPageState.players.map((player) => player.playerId);
+        sessionPageState.playerFiltersInitialized = true;
     } else {
-        const validIds = new Set(sessionPageState.players.map((player) => player.playerId));
+        sessionPageState.visibleServerIds = sessionPageState.visibleServerIds.filter((playerId) => validIds.has(playerId));
         sessionPageState.visiblePasserIds = sessionPageState.visiblePasserIds.filter((playerId) => validIds.has(playerId));
     }
 
@@ -285,6 +412,7 @@ const resetSelection = () => {
     sessionPageState.selectedPasserId = null;
     sessionPageState.selectedPassRating = null;
     sessionPageState.missedServe = false;
+    sessionPageState.editingRepId = null;
     document.getElementById("missedServe").checked = false;
     renderFilterSummaries();
     renderPlayerFilterOverlay();
@@ -309,6 +437,11 @@ const initializeSessionPage = async () => {
 
     await loadSession();
 
+    document.getElementById("editAbsentPlayersButton").addEventListener("click", () => {
+        sessionPageState.activeFilterMode = "absent";
+        renderPlayerFilterOverlay();
+    });
+
     document.getElementById("editServerFilterButton").addEventListener("click", () => {
         sessionPageState.activeFilterMode = "server";
         renderPlayerFilterOverlay();
@@ -332,7 +465,10 @@ const initializeSessionPage = async () => {
     });
 
     document.getElementById("overlayShowAllPlayersButton").addEventListener("click", () => {
-        const ids = sessionPageState.players.map((player) => player.playerId);
+        const players = sessionPageState.activeFilterMode === "absent"
+            ? sessionPageState.players
+            : presentPlayers();
+        const ids = players.map((player) => player.playerId);
         setFilterIds(sessionPageState.activeFilterMode, ids);
         renderPlayerFilterOverlay();
         renderFilterSummaries();
@@ -342,6 +478,19 @@ const initializeSessionPage = async () => {
 
     document.getElementById("overlayHideAllPlayersButton").addEventListener("click", () => {
         setFilterIds(sessionPageState.activeFilterMode, []);
+        renderPlayerFilterOverlay();
+        renderFilterSummaries();
+        renderPlayerSelectors();
+        updateRecordButton();
+    });
+
+    document.getElementById("overlaySelectComplementButton").addEventListener("click", () => {
+        const mode = sessionPageState.activeFilterMode;
+        if (mode !== "server" && mode !== "passer") {
+            return;
+        }
+
+        setFilterIds(mode, complementFilterIds(mode));
         renderPlayerFilterOverlay();
         renderFilterSummaries();
         renderPlayerSelectors();
@@ -362,8 +511,10 @@ const initializeSessionPage = async () => {
     document.getElementById("recordRepButton").addEventListener("click", async () => {
         setRecordMessage("");
 
+        const editingRepId = sessionPageState.editingRepId;
+
         const response = await authorizedFetch("/api/servereceive/rep", {
-            method: "POST",
+            method: editingRepId === null ? "POST" : "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -374,6 +525,7 @@ const initializeSessionPage = async () => {
                 passerPlayerId: sessionPageState.selectedPasserId,
                 passRating: sessionPageState.selectedPassRating,
                 missedServe: sessionPageState.missedServe,
+                repId: editingRepId,
             }),
         });
 
@@ -383,9 +535,14 @@ const initializeSessionPage = async () => {
             return;
         }
 
-        setRecordMessage("Rep recorded.");
+        setRecordMessage(editingRepId === null ? "Rep recorded." : "Rep updated.");
         resetSelection();
         await loadSession();
+    });
+
+    document.getElementById("cancelEditRepButton").addEventListener("click", () => {
+        resetSelection();
+        setRecordMessage("Edit cancelled.");
     });
 };
 
