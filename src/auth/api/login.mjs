@@ -5,9 +5,20 @@ import {newConnection} from "../../utils/dbUtils.mjs";
 
 const client = new OAuth2Client(env.auth.googleClientId);
 
+const ensureUserTrackingColumns = async (connection) => {
+    await connection.execute(`
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS createdAt TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+    `);
+    await connection.execute(`
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS lastLogin TIMESTAMP NULL DEFAULT NULL
+    `);
+};
+
 async function post(req, res) {
     try {
-        console.log("Received event:", req.body);
+        console.log("Received authentication request");
 
         const { idToken } = req.body;
 
@@ -23,7 +34,7 @@ async function post(req, res) {
                 idToken,
                 audience: env.auth.googleClientId,
             });
-            console.log(`ID Token verified: ${JSON.stringify(ticket)}`);
+            console.log("ID token verified");
         } catch (err) {
             console.log(`Error verifying ID token: ${err}`);
             if (err.code === "ENOTFOUND") {
@@ -56,11 +67,16 @@ async function post(req, res) {
 
             console.log("Connected to the database");
 
+            await ensureUserTrackingColumns(connection);
+
             // Insert the user into the `users` table
             const query = `
-                INSERT INTO users (userId, name, email, picture)
-                VALUES (?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE name = VALUES(name), picture = VALUES(picture);
+                INSERT INTO users (userId, name, email, picture, createdAt, lastLogin)
+                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                ON DUPLICATE KEY UPDATE
+                    name = VALUES(name),
+                    picture = VALUES(picture),
+                    lastLogin = CURRENT_TIMESTAMP;
               `;
             const [result] = await connection.execute(query, [
                 userId,
