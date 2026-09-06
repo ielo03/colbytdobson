@@ -11,11 +11,13 @@ import colbytdobsonResume from "./home/colbytdobsonResume.mjs";
 import questionablecocktailsAbout from "./questionablecocktails/questionablecocktailsAbout.mjs";
 import questionablecocktailsHome from "./questionablecocktails/questionablecocktailsHome.mjs";
 import questionablecocktailsAPIHandler from "./questionablecocktails/questionablecocktailsAPIHandler.mjs";
+import colbytdobsonUber from "./home/colbytdobsonUber.mjs";
 
 const router = express.Router();
 
 router.get("/", colbytdobsonHome.get);
 router.get("/resume", colbytdobsonResume.get);
+router.get("/uber", colbytdobsonUber.get);
 router.get("/sr", shortcuts.servereceive);
 router.get("/sr/*path", shortcuts.servereceive);
 router.get("/qc", shortcuts.questionablecocktails);
