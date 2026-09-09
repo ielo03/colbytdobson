@@ -1,6 +1,8 @@
-iframe {
+.resume-preview {
     flex: 1;
     border: none;
+    width: 100%;
+    min-width: 0;
 }
 
 .main {

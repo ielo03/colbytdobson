@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="generator" content="pdf2htmlEX"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <script>
@@ -279,6 +280,23 @@ a.push(this.scale);return JSON.stringify(a)}};pdf2htmlEX.Viewer=Viewer;})();
 <script>
 try{
 pdf2htmlEX.defaultViewer = new pdf2htmlEX.Viewer({});
+document.addEventListener('DOMContentLoaded', function () {
+  var viewer = pdf2htmlEX.defaultViewer;
+  var pageWidth = Math.max.apply(null, viewer.pages.map(function (page) {
+    return page.original_width;
+  }));
+
+  function fitResume() {
+    // Leave room for the page shadow, and keep the original size on wide screens.
+    var availableWidth = viewer.container.clientWidth - 16;
+    if (availableWidth > 0 && pageWidth > 0) {
+      viewer.rescale(Math.min(1, availableWidth / pageWidth), false);
+    }
+  }
+
+  fitResume();
+  new ResizeObserver(fitResume).observe(viewer.container);
+});
 }catch(e){}
 </script>
 <title></title>
