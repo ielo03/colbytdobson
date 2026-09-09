@@ -45,6 +45,7 @@ body {
 
 .footer-content {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: space-between;
@@ -53,7 +54,7 @@ body {
 
 .footer-links {
     display: flex;
-    flex-wrap: wrap;
+    flex-shrink: 0;
     gap: 0.75rem 1rem;
 }
 
@@ -207,10 +208,6 @@ ul, li, ol {
 }
 
 @media (max-width: 600px) {
-    .footer-content {
-        flex-direction: column;
-    }
-
     .table-wrapper {
         overflow-x: scroll; /* Enable scrolling on smaller screens */
     }
