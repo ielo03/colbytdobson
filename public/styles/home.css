@@ -1,3 +1,10 @@
+.home-intro {
+    max-width: 65ch;
+    margin: 1rem auto;
+    line-height: 1.6;
+    text-align: center;
+}
+
 /* General Container Styles */
 .project-container {
     display: flex;
